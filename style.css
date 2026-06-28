@@ -197,11 +197,6 @@ body {
 }
 
 @keyframes mobilePageIn {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes mobilePageIn {
     from { opacity: 0; transform: translateY(35px); }
     to   { opacity: 1; transform: translateY(0); }
 }
@@ -226,33 +221,43 @@ body {
         position: relative;
     }
 
-    /* Container layout does not translate sideways */
+    /* Container & Cover do not rotate/translate on mobile */
     .card-container.open {
         transform: none !important;
         transition: none !important;
     }
-
-    /* Cover flies away to the top-right */
+    
     .card-container.open .card-cover {
+        transform: none !important;
+        transition: none !important;
+        box-shadow: none;
+    }
+
+    /* ONLY the front cover face flies away to the top-right */
+    .card-container.open .face.front {
         animation: coverFlyAway 1.1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
         transform-origin: center center;
         pointer-events: none;
+        z-index: 10 !important;
     }
 
-    /* Immediately show the inner-left page (Die Feier) in the base card-back position. 
-       To do this, we place the inner-left page content (face.back) inside the container 
-       without rotation, so it's visible underneath the flying cover. */
+    /* Immediately show the inner-left page (Die Feier) flat and visible at the cover position */
+    .face.back {
+        /* Default backface hidden state override when card-open is active */
+        backface-visibility: visible !important;
+        -webkit-backface-visibility: visible !important;
+    }
+
     .card-perspective.card-open .face.back {
-        transform: none !important;
+        transform: rotateY(0deg) !important;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 4; /* Below flying cover, above background */
-        backface-visibility: visible !important;
-        -webkit-backface-visibility: visible !important;
+        z-index: 4;
         visibility: visible !important;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.30);
     }
 
     /* ── PHASE 2: After 1.3s vertical stack unfolds ── */
@@ -267,19 +272,26 @@ body {
         height: auto;
     }
 
-    /* Top panel (Page 1) is now static in the vertical flex flow */
+    /* Hide cover container completely after it flies off so it doesn't block interactions */
     .card-perspective.card-open.card-pages-visible .card-cover {
-        display: none !important; /* Hide cover completely after it flies off */
-    }
-
-    .card-perspective.card-open.card-pages-visible .face.back {
         position: relative !important;
         width: 100%;
         height: var(--card-h);
         max-height: var(--card-max-h);
+        background: transparent;
+        box-shadow: none;
+    }
+    
+    .card-perspective.card-open.card-pages-visible .face.front {
+        display: none !important;
+    }
+
+    .card-perspective.card-open.card-pages-visible .face.back {
+        position: absolute !important;
+        width: 100%;
+        height: 100%;
         box-shadow: 0 6px 24px rgba(0,0,0,0.30);
         border-radius: 12px;
-        display: block !important;
     }
 
     /* Bottom panel (Page 2 / timeline) slides up from below */
