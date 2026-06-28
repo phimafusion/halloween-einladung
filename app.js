@@ -22,6 +22,8 @@ window.cardApp = {
     setMusicStarted: (v) => { musicStarted = v; },
     getSpookyAudio: () => spookyAudio,
     setSpookyAudio: (audioObj) => { spookyAudio = audioObj; },
+    getIsMuted: () => isMuted,
+    setIsMuted: (v) => { isMuted = v; },
     toggleCard: (e) => toggleCard(e),
     startMusic: () => startMusic()
 };

@@ -33,8 +33,11 @@
         // Reset states
         window.cardApp.setCardOpen(false);
         window.cardApp.setMusicStarted(false);
-        if (window.cardApp.getSpookyAudio()) {
-          window.cardApp.getSpookyAudio().pause();
+        window.cardApp.setIsMuted(false);
+        
+        var sa = window.cardApp.getSpookyAudio();
+        if (sa && typeof sa.pause === 'function') {
+          try { sa.pause(); } catch(e) {}
         }
         window.cardApp.setSpookyAudio(null);
       });
@@ -80,6 +83,7 @@
             playCalled = true;
             return Promise.resolve();
           },
+          pause: function() {},
           loop: true,
           volume: 0.35
         };
@@ -100,18 +104,23 @@
 
       QUnit.test('Muting updates spookyAudio volume', function(assert) {
         var mockAudio = {
+          play: function() { return Promise.resolve(); },
+          pause: function() {},
           loop: true,
           volume: 0.35
         };
         window.cardApp.setSpookyAudio(mockAudio);
 
-        // Simulate click on mute button (mute = true)
+        // Ensure we start unmuted
+        window.cardApp.setIsMuted(false);
+
+        // Simulate click on mute button (mute becomes true)
         var soundBtn = document.getElementById('sound-toggle');
         soundBtn.click(); // trigger toggle event listener
         
         assert.equal(mockAudio.volume, 0, 'Volume is 0 when muted');
 
-        // Unmute (mute = false)
+        // Unmute (mute becomes false)
         soundBtn.click();
         assert.equal(mockAudio.volume, 0.35, 'Volume is restored to 0.35 when unmuted');
       });
@@ -145,6 +154,7 @@
             playCalled = true;
             return Promise.resolve();
           },
+          pause: function() {},
           loop: true,
           volume: 0.35
         };
