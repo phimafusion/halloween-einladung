@@ -196,10 +196,37 @@ body {
     transform: translateX(25%);
 }
 
-@media (max-width: 480px) {
-    /* Slightly less translation on tiny mobiles to prevent left page clipping */
-    .card-container.open {
-        transform: translateX(22%);
+@media (max-width: 600px) {
+    /* When open: shrink perspective so both pages fit (46vw each = 92vw total) */
+    .card-perspective.card-open {
+        width: 46vw;
+        max-width: 220px;
+        height: 71vw;
+        max-height: 340px;
+    }
+    /* Re-center: translateX(50%) of the now-46vw container = 23vw shift */
+    .card-perspective.card-open .card-container.open {
+        transform: translateX(50%);
+    }
+    /* Scale down text in the inner pages to fit */
+    .card-perspective.card-open .section-title.gothic {
+        font-size: 1.1rem;
+    }
+    .card-perspective.card-open .spooky-lead {
+        font-size: 0.7rem;
+    }
+    .card-perspective.card-open .invitation-text,
+    .card-perspective.card-open .menu-list li,
+    .card-perspective.card-open .timeline-item,
+    .card-perspective.card-open .footer-note p {
+        font-size: 0.6rem;
+    }
+    .card-perspective.card-open .inner-content {
+        padding: 14px 10px;
+    }
+    .card-perspective.card-open .menu-box,
+    .card-perspective.card-open .timeline {
+        gap: 4px;
     }
 }
 

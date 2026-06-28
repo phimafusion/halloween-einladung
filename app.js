@@ -347,9 +347,12 @@ function toggleCard(event) {
 
     cardOpen = !cardOpen;
 
+    const card = getCardElement();
+    const perspective = card ? card.closest('.card-perspective') : null;
+
     if (cardOpen) {
-        const card = getCardElement();
         if (card) card.classList.add('open');
+        if (perspective) perspective.classList.add('card-open');
         targetAngle = Math.PI;
 
         // Spawn bats from the crease
@@ -368,8 +371,8 @@ function toggleCard(event) {
         }
         // On subsequent opens: music is already running, nothing to change
     } else {
-        const card = getCardElement();
         if (card) card.classList.remove('open');
+        if (perspective) perspective.classList.remove('card-open');
         targetAngle = 0;
         // Music keeps playing when card closes
     }
