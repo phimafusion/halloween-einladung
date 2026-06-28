@@ -190,22 +190,20 @@ function playEvilLaugh(onEnded) {
         if (typeof onEnded === 'function') onEnded();
     }
 }
-
 // ── 3. RHPS MUSIC (MP3) ──────────────────────────────────────────────────
 function startMusic() {
-    if (musicStarted) return;
-    musicStarted = true;
     if (!spookyAudio) {
         spookyAudio = new Audio('assets/rhps_time_warp_song_cut.mp3');
         spookyAudio.loop = true;
         spookyAudio.volume = isMuted ? 0 : 0.35;
     }
-    // Slight delay so laugh plays first
-    setTimeout(() => {
+    musicStarted = true;
+    
+    // Crucial: Only play if card remains open!
+    if (cardOpen && !isMuted) {
         spookyAudio.play().catch(e => console.log('Music play blocked:', e));
-    }, 300);
+    }
 }
-
 // ── MUTE CONTROL ─────────────────────────────────────────────────────────
 function applyMuteState() {
     if (audioCtxAmbient && audioCtxAmbient._masterGain) {
@@ -500,3 +498,15 @@ resizeCanvas();
 initWebStrands();
 setSoundBtnIcon(); // set to unmuted icon initially
 requestAnimationFrame(animate);
+
+// Export variables/functions to window for QUnit tests
+window.cardApp = {
+    getCardOpen: () => cardOpen,
+    setCardOpen: (v) => { cardOpen = v; },
+    getMusicStarted: () => musicStarted,
+    setMusicStarted: (v) => { musicStarted = v; },
+    getSpookyAudio: () => spookyAudio,
+    setSpookyAudio: (audioObj) => { spookyAudio = audioObj; },
+    toggleCard: toggleCard,
+    startMusic: startMusic
+};

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Halloween Einladung - Audio & Card Tests</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.20.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <!-- Fixtures needed by app.js elements -->
+    <div class="card-perspective">
+      <div id="halloween-card" class="card-container">
+        <div class="card-cover">
+          <div class="face front"></div>
+          <div class="face back"></div>
+        </div>
+        <div class="card-back"></div>
+      </div>
+    </div>
+    <button id="sound-toggle"></button>
+    <canvas id="animation-canvas"></canvas>
+  </div>
+
+  <script src="https://code.jquery.com/qunit/qunit-2.20.0.js"></script>
+  <!-- Load main app.js code -->
+  <script src="app.js"></script>
+
+  <script>
+    QUnit.module('Audio & Card Toggling State Tests', function(hooks) {
+      
+      hooks.beforeEach(function() {
+        // Reset states
+        window.cardApp.setCardOpen(false);
+        window.cardApp.setMusicStarted(false);
+        if (window.cardApp.getSpookyAudio()) {
+          window.cardApp.getSpookyAudio().pause();
+        }
+        window.cardApp.setSpookyAudio(null);
+      });
+
+      QUnit.test('Closing card pauses music immediately', function(assert) {
+        // Mock a running audio object
+        var pauseCalled = false;
+        var playCalled = false;
+        var mockAudio = {
+          play: function() {
+            playCalled = true;
+            return Promise.resolve();
+          },
+          pause: function() {
+            pauseCalled = true;
+          },
+          loop: true,
+          volume: 0.35
+        };
+
+        window.cardApp.setSpookyAudio(mockAudio);
+        window.cardApp.setMusicStarted(true);
+
+        // 1. Simulate opening the card (CardOpen becomes true)
+        window.cardApp.toggleCard();
+        assert.true(window.cardApp.getCardOpen(), 'Card is now open');
+        assert.true(playCalled, 'Music play() was called on open');
+
+        // Reset tracking variables
+        playCalled = false;
+        pauseCalled = false;
+
+        // 2. Simulate closing the card (CardOpen becomes false)
+        window.cardApp.toggleCard();
+        assert.false(window.cardApp.getCardOpen(), 'Card is closed');
+        assert.true(pauseCalled, 'Music pause() was immediately called when card closed');
+      });
+
+      QUnit.test('Music does not play on lazy callbacks if card was closed in the meantime', function(assert) {
+        var playCalled = false;
+        var mockAudio = {
+          play: function() {
+            playCalled = true;
+            return Promise.resolve();
+          },
+          loop: true,
+          volume: 0.35
+        };
+
+        window.cardApp.setSpookyAudio(mockAudio);
+        
+        // 1. Open the card
+        window.cardApp.setCardOpen(true);
+
+        // 2. Before music finishes callback/startMusic runs, user closes the card!
+        window.cardApp.setCardOpen(false);
+
+        // 3. Delayed startMusic callback executes
+        window.cardApp.startMusic();
+        
+        assert.false(playCalled, 'Music play() was BLOCKED from starting because card is closed');
+      });
+      
+    });
+  </script>
+</body>
+</html>
