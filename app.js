@@ -136,49 +136,22 @@ function stopAmbient() {
     }, 1600);
 }
 
-// ── 2. EVIL LAUGH SYNTHESIZER ─────────────────────────────────────────────
-function playEvilLaugh() {
+// ── 2. EVIL LAUGH (MP3) ──────────────────────────────────────────────────
+function playEvilLaugh(onEnded) {
     try {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        const ac = new AudioContextClass();
-        const master = ac.createGain();
-        master.gain.setValueAtTime(isMuted ? 0 : 0.5, ac.currentTime);
-        master.connect(ac.destination);
-
-        // Build 5 laugh "ha" bursts
-        const laughTimes = [0, 0.35, 0.62, 0.82, 0.98, 1.18, 1.35, 1.55, 1.7, 1.82];
-        laughTimes.forEach((t, i) => {
-            const osc = ac.createOscillator();
-            osc.type = 'sawtooth';
-            // Descending pitch per burst group for realism
-            const base = 220 - Math.floor(i / 2) * 12;
-            osc.frequency.setValueAtTime(base * 1.2, ac.currentTime + t);
-            osc.frequency.exponentialRampToValueAtTime(base * 0.7, ac.currentTime + t + 0.28);
-
-            const dist = ac.createWaveShaper();
-            const curve = new Float32Array(256);
-            for (let j = 0; j < 256; j++) {
-                const x = (j * 2) / 256 - 1;
-                curve[j] = (Math.PI + 120) * x / (Math.PI + 120 * Math.abs(x));
-            }
-            dist.curve = curve;
-
-            const g = ac.createGain();
-            g.gain.setValueAtTime(0, ac.currentTime + t);
-            g.gain.linearRampToValueAtTime(0.4, ac.currentTime + t + 0.04);
-            g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + t + 0.28);
-
-            osc.connect(dist);
-            dist.connect(g);
-            g.connect(master);
-            osc.start(ac.currentTime + t);
-            osc.stop(ac.currentTime + t + 0.35);
+        const laugh = new Audio('assets/evil_laugh.mp3');
+        laugh.volume = isMuted ? 0 : 0.7;
+        laugh.play().catch(e => console.log('Laugh play blocked:', e));
+        laugh.addEventListener('ended', () => {
+            if (typeof onEnded === 'function') onEnded();
         });
-
-        // Close context after laugh
-        setTimeout(() => { try { ac.close(); } catch(e) {} }, 2500);
+        // Fallback: if ended event never fires within 10s, call onEnded anyway
+        setTimeout(() => {
+            if (typeof onEnded === 'function') onEnded();
+        }, 10000);
     } catch(e) {
-        console.log('Laugh synth failed:', e);
+        console.log('Laugh MP3 failed:', e);
+        if (typeof onEnded === 'function') onEnded();
     }
 }
 
@@ -388,11 +361,10 @@ function toggleCard(event) {
         // Reset webs
         initWebStrands();
 
-        // On FIRST card open: stop ambient, play laugh, start music
+        // On FIRST card open: stop ambient, play laugh, then start music after laugh ends
         if (!musicStarted) {
             stopAmbient();
-            playEvilLaugh();
-            startMusic();
+            playEvilLaugh(() => startMusic());
         }
         // On subsequent opens: music is already running, nothing to change
     } else {
