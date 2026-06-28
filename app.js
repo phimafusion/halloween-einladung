@@ -403,6 +403,11 @@ function toggleCard(event) {
         if (!musicStarted) {
             stopAmbient();
             playEvilLaugh(() => startMusic());
+        } else {
+            // On subsequent opens: resume music if it was paused
+            if (spookyAudio && !isMuted) {
+                spookyAudio.play().catch(e => console.log('Music play blocked:', e));
+            }
         }
 
         // Mobile Phase 2: after 3D flip completes, slide inner-right page in below
@@ -418,7 +423,11 @@ function toggleCard(event) {
             perspective.classList.remove('card-pages-visible');
         }
         targetAngle = 0;
-        // Music keeps playing when card closes
+        
+        // Pause music when card closes
+        if (spookyAudio) {
+            spookyAudio.pause();
+        }
     }
 }
 
