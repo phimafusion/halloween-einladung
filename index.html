@@ -92,8 +92,8 @@
                                 </g>
                             </g>
 
-                            <!-- Bottom-left: Small pumpkin -->
-                            <g transform="translate(4, 440) scale(0.60)" opacity="0.55">
+                            <!-- Mid-left: Small pumpkin (moved up from bottom) -->
+                            <g transform="translate(4, 230) scale(0.60)" opacity="0.55">
                                 <g class="animated-pumpkin">
                                     <ellipse cx="55" cy="55" rx="28" ry="30" fill="#e8821a" opacity="0.5"
                                         filter="url(#blur1)" />
@@ -161,7 +161,9 @@
                                 Doch statt Kaffeekränzchen und Tortenduft,<br>
                                 liegt heuer Spuk und Grusel in der Luft!
                             </p>
-                            <div class="decoration-element witch-hat"></div>
+                            <p class="spooky-joke">
+                                „Keine Sorge wegen der Falten – wir nennen sie heuer einfach 'anatomische Spinnenweben'!“
+                            </p>
 
                             <div class="menu-box">
                                 <h3 class="box-title">Magisches Menü</h3>
@@ -203,9 +205,9 @@
                                     d="M60 42 Q72 45 77 58 Q78 70 70 78 Q62 83 52 78 Q43 72 42 60 Q42 47 52 43 Q56 41 60 42" />
                             <!-- Spider (dangling from thread) -->
                             <g class="animated-spider-container">
-                                <!-- Dangling thread that extends dynamically -->
-                                <line x1="103" y1="60" x2="103" y2="132" class="spider-thread" stroke="#5a3a1a" stroke-width="1.0" opacity="0.75" />
-                                <g transform="translate(103, 60)" class="animated-spider" opacity="0.8">
+                                <!-- Dangling thread that extends dynamically from center of web (60,60) -->
+                                <line x1="60" y1="60" x2="60" y2="132" class="spider-thread" stroke="#5a3a1a" stroke-width="1.0" opacity="0.75" />
+                                <g transform="translate(60, 60)" class="animated-spider" opacity="0.8">
                                     <ellipse cx="0" cy="0" rx="5" ry="4" fill="#2a1040" />
                                     <ellipse cx="0" cy="5" rx="4" ry="3" fill="#2a1040" />
                                     <g stroke="#2a1040" stroke-width="0.9" fill="none">

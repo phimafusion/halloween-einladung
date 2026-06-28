@@ -729,8 +729,22 @@ body {
 }
 
 .spider-thread {
-    transform-origin: 103px 60px;
+    transform-origin: 60px 60px; /* Aligned with center of the web */
     animation: stretchThread 7.5s ease-in-out infinite;
+}
+
+/* 4. Spooky Joke Styling */
+.spooky-joke {
+    text-align: center;
+    font-family: var(--font-watercolor);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #4a2f0f;
+    line-height: 1.4;
+    padding: 6px 15px;
+    margin: 10px auto;
+    max-width: 90%;
+    opacity: 0.85;
 }
 
 /* 4. Interactive Pumpkin Tilts (on hover of the card sections) */
