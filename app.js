@@ -7,17 +7,7 @@
 let cardOpen = false;
 let openingAngle = 0; // 0 to Math.PI (0 to 180 degrees)
 let targetAngle = 0;
-
-// Audio context and synth nodes
-let audioCtx = null;
-let synthRunning = false;
-let isMuted = true;
-let droneNode = null;
-let droneLfo = null;
-let noiseNode = null;
-let windFilter = null;
-let masterGain = null;
-let chimeTimer = null;
+let firstUserInteraction = false;
 
 // Canvas setup
 const canvas = document.getElementById('animation-canvas');
@@ -55,44 +45,176 @@ function drawBatPath(c, x, y, width, height, flapFactor) {
     c.restore();
 }
 
-// --- Audio setup ---
-let spookyAudio = null;
+// --- Audio System ---
+// Phase 1: Ambient spooky synth (page load → card first open)
+// Phase 2: Evil laugh (plays once when card opens for the first time)
+// Phase 3: RHPS music (starts after laugh, persists through card close/reopen)
 
-function initSynth() {
-    if (synthRunning) return;
+let audioCtxAmbient = null;
+let ambientStarted = false;
+let musicStarted = false; // once true, never goes back to ambient
+let isMuted = false;
+let spookyAudio = null; // the RHPS MP3
+
+// --- Sound Button State ---
+function setSoundBtnIcon() {
+    const btn = document.getElementById('sound-toggle');
+    if (!btn) return;
+    btn.innerHTML = isMuted ? '🔇' : '🔊';
+    btn.setAttribute('aria-label', isMuted ? 'Ton einschalten' : 'Ton ausschalten');
+}
+
+// ── 1. AMBIENT WEB AUDIO SYNTH ───────────────────────────────────────────
+function startAmbient() {
+    if (ambientStarted || musicStarted) return;
     try {
-        if (!spookyAudio) {
-            spookyAudio = new Audio('assets/rhps_time_warp_song_cut.mp3');
-            spookyAudio.loop = true;
-            spookyAudio.volume = 0.3; // atmospheric volume
-        }
-        spookyAudio.play().catch(e => console.log("Audio play blocked by browser:", e));
-    } catch(err) {
-        console.log("Audio not supported or mocked:", err);
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtxAmbient = new AudioContextClass();
+
+        const masterGain = audioCtxAmbient.createGain();
+        masterGain.gain.setValueAtTime(isMuted ? 0 : 0.0, audioCtxAmbient.currentTime);
+        masterGain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.7, audioCtxAmbient.currentTime + 2.0);
+        masterGain.connect(audioCtxAmbient.destination);
+
+        // Low eerie drone (two detuned triangle oscillators)
+        [55, 55.4, 82.5].forEach((freq, i) => {
+            const osc = audioCtxAmbient.createOscillator();
+            osc.type = i === 2 ? 'sine' : 'triangle';
+            osc.frequency.setValueAtTime(freq, audioCtxAmbient.currentTime);
+            const g = audioCtxAmbient.createGain();
+            g.gain.setValueAtTime(i === 2 ? 0.025 : 0.04, audioCtxAmbient.currentTime);
+            osc.connect(g);
+            g.connect(masterGain);
+            osc.start();
+        });
+
+        // Wind: filtered noise
+        const bufSize = audioCtxAmbient.sampleRate * 3;
+        const noiseBuf = audioCtxAmbient.createBuffer(1, bufSize, audioCtxAmbient.sampleRate);
+        const d = noiseBuf.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) d[i] = Math.random() * 2 - 1;
+        const noise = audioCtxAmbient.createBufferSource();
+        noise.buffer = noiseBuf;
+        noise.loop = true;
+        const windFilt = audioCtxAmbient.createBiquadFilter();
+        windFilt.type = 'bandpass';
+        windFilt.Q.value = 4;
+        windFilt.frequency.value = 350;
+        const windGain = audioCtxAmbient.createGain();
+        windGain.gain.value = 0.018;
+        noise.connect(windFilt);
+        windFilt.connect(windGain);
+        windGain.connect(masterGain);
+        noise.start();
+
+        // Slowly sweep wind filter
+        setInterval(() => {
+            if (!audioCtxAmbient || audioCtxAmbient.state !== 'running') return;
+            windFilt.frequency.exponentialRampToValueAtTime(
+                200 + Math.random() * 700,
+                audioCtxAmbient.currentTime + 4 + Math.random() * 5
+            );
+        }, 6000);
+
+        // Store masterGain so mute can control it
+        audioCtxAmbient._masterGain = masterGain;
+        ambientStarted = true;
+    } catch(e) {
+        console.log('Ambient audio init failed:', e);
     }
-    synthRunning = true;
 }
 
-function updateMuteState() {
-    const soundBtn = document.getElementById('sound-toggle');
-    if (isMuted) {
-        if (spookyAudio) {
-            spookyAudio.muted = true;
-        }
-        soundBtn.innerHTML = '🔇';
-        soundBtn.setAttribute('aria-label', 'Ton einschalten');
-    } else {
-        initSynth();
-        if (spookyAudio) {
-            spookyAudio.muted = false;
-            try {
-                spookyAudio.play().catch(e => console.log("Audio play blocked by browser:", e));
-            } catch(err) {}
-        }
-        soundBtn.innerHTML = '🔊';
-        soundBtn.setAttribute('aria-label', 'Ton ausschalten');
+function stopAmbient() {
+    if (!audioCtxAmbient) return;
+    const g = audioCtxAmbient._masterGain;
+    if (g) {
+        g.gain.linearRampToValueAtTime(0, audioCtxAmbient.currentTime + 1.5);
+    }
+    setTimeout(() => {
+        try { audioCtxAmbient.close(); } catch(e) {}
+        audioCtxAmbient = null;
+    }, 1600);
+}
+
+// ── 2. EVIL LAUGH SYNTHESIZER ─────────────────────────────────────────────
+function playEvilLaugh() {
+    try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        const ac = new AudioContextClass();
+        const master = ac.createGain();
+        master.gain.setValueAtTime(isMuted ? 0 : 0.5, ac.currentTime);
+        master.connect(ac.destination);
+
+        // Build 5 laugh "ha" bursts
+        const laughTimes = [0, 0.35, 0.62, 0.82, 0.98, 1.18, 1.35, 1.55, 1.7, 1.82];
+        laughTimes.forEach((t, i) => {
+            const osc = ac.createOscillator();
+            osc.type = 'sawtooth';
+            // Descending pitch per burst group for realism
+            const base = 220 - Math.floor(i / 2) * 12;
+            osc.frequency.setValueAtTime(base * 1.2, ac.currentTime + t);
+            osc.frequency.exponentialRampToValueAtTime(base * 0.7, ac.currentTime + t + 0.28);
+
+            const dist = ac.createWaveShaper();
+            const curve = new Float32Array(256);
+            for (let j = 0; j < 256; j++) {
+                const x = (j * 2) / 256 - 1;
+                curve[j] = (Math.PI + 120) * x / (Math.PI + 120 * Math.abs(x));
+            }
+            dist.curve = curve;
+
+            const g = ac.createGain();
+            g.gain.setValueAtTime(0, ac.currentTime + t);
+            g.gain.linearRampToValueAtTime(0.4, ac.currentTime + t + 0.04);
+            g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + t + 0.28);
+
+            osc.connect(dist);
+            dist.connect(g);
+            g.connect(master);
+            osc.start(ac.currentTime + t);
+            osc.stop(ac.currentTime + t + 0.35);
+        });
+
+        // Close context after laugh
+        setTimeout(() => { try { ac.close(); } catch(e) {} }, 2500);
+    } catch(e) {
+        console.log('Laugh synth failed:', e);
     }
 }
+
+// ── 3. RHPS MUSIC (MP3) ──────────────────────────────────────────────────
+function startMusic() {
+    if (musicStarted) return;
+    musicStarted = true;
+    if (!spookyAudio) {
+        spookyAudio = new Audio('assets/rhps_time_warp_song_cut.mp3');
+        spookyAudio.loop = true;
+        spookyAudio.volume = isMuted ? 0 : 0.35;
+    }
+    // Slight delay so laugh plays first
+    setTimeout(() => {
+        spookyAudio.play().catch(e => console.log('Music play blocked:', e));
+    }, 300);
+}
+
+// ── MUTE CONTROL ─────────────────────────────────────────────────────────
+function applyMuteState() {
+    if (audioCtxAmbient && audioCtxAmbient._masterGain) {
+        const target = isMuted ? 0 : 0.7;
+        audioCtxAmbient._masterGain.gain.linearRampToValueAtTime(
+            target, audioCtxAmbient.currentTime + 0.4
+        );
+    }
+    if (spookyAudio) {
+        spookyAudio.volume = isMuted ? 0 : 0.35;
+    }
+    setSoundBtnIcon();
+}
+
+// Compatibility alias used elsewhere in the code
+function initSynth() { startAmbient(); }
+function updateMuteState() { applyMuteState(); }
+function synthRunning() { return ambientStarted || musicStarted; }
 
 // --- Particles & Physics ---
 
@@ -243,34 +365,41 @@ function resizeCanvas() {
 function toggleCard(event) {
     // Avoid toggling card if mute button is clicked
     if (event && event.target.closest('#sound-toggle')) return;
-    
+
+    // Ensure ambient has started on first interaction
+    if (!firstUserInteraction) {
+        firstUserInteraction = true;
+        startAmbient();
+    }
+
     cardOpen = !cardOpen;
-    
+
     if (cardOpen) {
         const card = getCardElement();
         if (card) card.classList.add('open');
-        targetAngle = Math.PI; // 180 degrees
-        
+        targetAngle = Math.PI;
+
         // Spawn bats from the crease
         const rect = getCardElement() ? getCardElement().getBoundingClientRect() : { left: 0, top: 0, height: 0, width: 0 };
-        // Crease is on the left edge of the card container
         const creaseX = rect.left;
         const centerY = rect.top + rect.height / 2;
         spawnBats(creaseX, centerY);
-        
-        // Initialize/reset webs when opening
+
+        // Reset webs
         initWebStrands();
-        
-        // Init & play audio
-        initSynth();
-        if (isMuted) {
-            isMuted = false;
-            updateMuteState();
+
+        // On FIRST card open: stop ambient, play laugh, start music
+        if (!musicStarted) {
+            stopAmbient();
+            playEvilLaugh();
+            startMusic();
         }
+        // On subsequent opens: music is already running, nothing to change
     } else {
         const card = getCardElement();
         if (card) card.classList.remove('open');
         targetAngle = 0;
+        // Music keeps playing when card closes
     }
 }
 
@@ -318,12 +447,28 @@ if (getCardElement()) {
 
 document.getElementById('sound-toggle').addEventListener('click', (e) => {
     e.stopPropagation();
-    initSynth();
     isMuted = !isMuted;
-    updateMuteState();
+    // If user un-mutes before any interaction, start ambient
+    if (!isMuted && !firstUserInteraction) {
+        firstUserInteraction = true;
+        startAmbient();
+    }
+    applyMuteState();
+    setSoundBtnIcon();
 });
+
+// On first click/touch anywhere on the page, start ambient
+// (browser autoplay policy: audio requires user gesture)
+function handleFirstInteraction() {
+    if (firstUserInteraction) return;
+    firstUserInteraction = true;
+    startAmbient();
+}
+document.addEventListener('click', handleFirstInteraction, { once: true });
+document.addEventListener('touchstart', handleFirstInteraction, { once: true });
 
 // Initial Setup
 resizeCanvas();
 initWebStrands();
+setSoundBtnIcon(); // set to unmuted icon initially
 requestAnimationFrame(animate);
