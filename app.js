@@ -3,11 +3,16 @@
  * Logic for Card Opening, Canvas Spiderwebs & Bats, and Spooky Web Audio Synth.
  */
 
-// --- Global States ---
-let cardOpen = false;
-let openingAngle = 0; // 0 to Math.PI (0 to 180 degrees)
-let targetAngle = 0;
-let firstUserInteraction = false;
+// --- Global States (using var for TDZ safety in tests) ---
+var cardOpen = false;
+var openingAngle = 0; // 0 to Math.PI (0 to 180 degrees)
+var targetAngle = 0;
+var firstUserInteraction = false;
+var audioCtxAmbient = null;
+var ambientStarted = false;
+var musicStarted = false;
+var isMuted = false;
+var spookyAudio = null;
 
 // Export variables/functions to window for QUnit tests (placed at top for early access)
 window.cardApp = {
@@ -98,11 +103,6 @@ function drawBatPath(c, x, y, width, height, flapFactor) {
 // Phase 2: Evil laugh (plays once when card opens for the first time)
 // Phase 3: RHPS music (starts after laugh, persists through card close/reopen)
 
-let audioCtxAmbient = null;
-let ambientStarted = false;
-let musicStarted = false; // once true, never goes back to ambient
-let isMuted = false;
-let spookyAudio = null; // the RHPS MP3
 
 // --- Sound Button State ---
 function setSoundBtnIcon() {
