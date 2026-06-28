@@ -8,8 +8,6 @@ var cardOpen = false;
 var openingAngle = 0; // 0 to Math.PI (0 to 180 degrees)
 var targetAngle = 0;
 var firstUserInteraction = false;
-var audioCtxAmbient = null;
-var ambientStarted = false;
 var musicStarted = false;
 var isMuted = false;
 var spookyAudio = null;
@@ -153,10 +151,7 @@ function applyMuteState() {
     setSoundBtnIcon();
 }
 
-// Compatibility alias used elsewhere in the code
-function initSynth() { }
-function updateMuteState() { applyMuteState(); }
-function synthRunning() { return musicStarted; }
+
 
 // --- Particles & Physics ---
 
