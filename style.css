@@ -725,3 +725,21 @@ body {
     transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
     transform-origin: center bottom;
 }
+
+/* 5. Menu Icons Wiggle on Hover */
+@keyframes wiggleIcon {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-8deg) scale(1.15); }
+    75% { transform: rotate(8deg) scale(1.15); }
+}
+
+.menu-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+}
+
+.menu-list li:hover .menu-icon {
+    animation: wiggleIcon 0.5s ease-in-out infinite alternate;
+}
+
