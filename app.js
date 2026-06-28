@@ -405,15 +405,16 @@ if (getCardElement()) {
     getCardElement().addEventListener('click', toggleCard);
 }
 
-const soundToggleBtn = document.getElementById('sound-toggle');
-if (soundToggleBtn) {
-    soundToggleBtn.addEventListener('click', (e) => {
+// Event delegation for sound-toggle to survive QUnit fixture teardowns
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#sound-toggle');
+    if (btn) {
         e.stopPropagation();
         isMuted = !isMuted;
         applyMuteState();
         setSoundBtnIcon();
-    });
-}
+    }
+});
 
 // On first click/touch anywhere on the page, flag first interaction (but no ambient synth starts)
 function handleFirstInteraction() {
