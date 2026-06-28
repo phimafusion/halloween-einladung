@@ -97,6 +97,63 @@
         
         assert.false(playCalled, 'Music play() was BLOCKED from starting because card is closed');
       });
+
+      QUnit.test('Muting updates spookyAudio volume', function(assert) {
+        var mockAudio = {
+          loop: true,
+          volume: 0.35
+        };
+        window.cardApp.setSpookyAudio(mockAudio);
+
+        // Simulate click on mute button (mute = true)
+        var soundBtn = document.getElementById('sound-toggle');
+        soundBtn.click(); // trigger toggle event listener
+        
+        assert.equal(mockAudio.volume, 0, 'Volume is 0 when muted');
+
+        // Unmute (mute = false)
+        soundBtn.click();
+        assert.equal(mockAudio.volume, 0.35, 'Volume is restored to 0.35 when unmuted');
+      });
+
+      QUnit.test('Card toggle updates DOM classes correctly', function(assert) {
+        var card = document.getElementById('halloween-card');
+        var perspective = card.closest('.card-perspective');
+
+        // Reset classes
+        card.classList.remove('open');
+        perspective.classList.remove('card-open');
+
+        // Open card
+        window.cardApp.toggleCard();
+        assert.true(card.classList.contains('open'), 'Card container has class "open"');
+        assert.true(perspective.classList.contains('card-open'), 'Perspective container has class "card-open"');
+
+        // Close card
+        window.cardApp.toggleCard();
+        assert.false(card.classList.contains('open'), 'Card container lost class "open"');
+        assert.false(perspective.classList.contains('card-open'), 'Perspective container lost class "card-open"');
+      });
+
+      QUnit.test('Subsequent card opens do not trigger laugh again', function(assert) {
+        // Set state as if music had already started previously
+        window.cardApp.setMusicStarted(true);
+
+        var playCalled = false;
+        var mockAudio = {
+          play: function() {
+            playCalled = true;
+            return Promise.resolve();
+          },
+          loop: true,
+          volume: 0.35
+        };
+        window.cardApp.setSpookyAudio(mockAudio);
+
+        // Toggle card open
+        window.cardApp.toggleCard();
+        assert.true(playCalled, 'spookyAudio.play() is resumed directly instead of waiting for laugh');
+      });
       
     });
   </script>
