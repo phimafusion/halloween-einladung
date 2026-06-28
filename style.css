@@ -202,26 +202,24 @@ body {
 }
 
 @media (max-width: 600px) {
-    /* ── PHASE 1: 3D flip (same CSS transition as desktop) ─────────────── */
-    /* Prevent horizontal overflow — no translateX shift on mobile */
+    /* ── PHASE 1: 3D flip (same CSS transition as desktop) ──────────────── */
+    /* Prevent horizontal overflow — no translateX shift */
     .card-container.open {
         transform: translateX(0) !important;
     }
-
-    /* Card stays at single-page size while flipping */
+    /* Card stays at single-page width while flipping */
     .card-perspective {
         width: 88vw;
         max-width: 360px;
     }
 
-    /* ── PHASE 2: After flip — vertical stack ────────────────────────────── */
+    /* ── PHASE 2: After flip — vertical stack ───────────────────────────── */
 
-    /* Expand height to hold both pages */
     .card-perspective.card-open.card-pages-visible {
         height: auto;
     }
 
-    /* Container: flex column, drop the 3D translation */
+    /* Flex column layout, no 3D translation */
     .card-perspective.card-open.card-pages-visible .card-container {
         display: flex;
         flex-direction: column;
@@ -230,17 +228,33 @@ body {
         transform: none !important;
     }
 
-    /* Cover becomes top panel — keep it relative so it flows in flex */
+    /* Cover: flatten immediately (no transition) and show as top panel */
     .card-perspective.card-open.card-pages-visible .card-cover {
         position: relative !important;
         width: 100%;
         height: var(--card-h);
         max-height: var(--card-max-h);
-        /* cover is already rotated −180° → .face.back is showing correctly */
+        /* Snap flat — no transition so the switch is instant after flip completes */
+        transition: none !important;
+        transform: rotateY(0deg) !important;
+        transform-style: flat !important;
         box-shadow: 0 6px 24px rgba(0,0,0,0.30);
+        border-radius: 12px;
     }
 
-    /* Card-back: second panel slides in below */
+    /* Hide the outer front face (cover image) */
+    .card-perspective.card-open.card-pages-visible .face.front {
+        display: none;
+    }
+
+    /* Show inner-left page flat — override 3D backface behavior */
+    .card-perspective.card-open.card-pages-visible .face.back {
+        transform: none !important;
+        backface-visibility: visible !important;
+        -webkit-backface-visibility: visible !important;
+    }
+
+    /* Card-back: second panel slides up from below */
     .card-perspective.card-open.card-pages-visible .card-back {
         position: relative !important;
         top: 0 !important;
@@ -248,7 +262,8 @@ body {
         height: var(--card-h);
         max-height: var(--card-max-h);
         box-shadow: 0 6px 24px rgba(0,0,0,0.30);
-        animation: mobilePageIn 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+        border-radius: 12px;
+        animation: mobilePageIn 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     }
 
     /* Reset translateZ — not needed in flat flex context */

@@ -23,14 +23,12 @@ const webStrands = [];
 const MAX_BATS = 25;
 
 // Bat silhouette — body + ears + articulated wings with wingtip fingers
+// NOTE: no shadowBlur — too expensive on mobile canvas
 function drawBatPath(c, x, y, width, height, flapFactor) {
     c.save();
     c.translate(x, y);
     const flap = Math.abs(flapFactor); // 0..1
 
-    // Shadow/glow for depth
-    c.shadowColor = 'rgba(80,0,120,0.55)';
-    c.shadowBlur = 8;
     c.fillStyle = '#180e28';
 
     // ── Body ─────────────────────────────────────────────
@@ -40,47 +38,43 @@ function drawBatPath(c, x, y, width, height, flapFactor) {
 
     // ── Ears ──────────────────────────────────────────────
     c.beginPath();
-    // Left ear
     c.moveTo(-width * 0.055, -height * 0.06);
     c.lineTo(-width * 0.12, -height * 0.34 - flap * height * 0.04);
     c.lineTo(-width * 0.01, -height * 0.07);
-    // Right ear
-    c.moveTo(width * 0.055, -height * 0.06);
-    c.lineTo(width * 0.12, -height * 0.34 - flap * height * 0.04);
-    c.lineTo(width * 0.01, -height * 0.07);
+    c.moveTo( width * 0.055, -height * 0.06);
+    c.lineTo( width * 0.12, -height * 0.34 - flap * height * 0.04);
+    c.lineTo( width * 0.01, -height * 0.07);
     c.fill();
 
-    // ── Left wing membrane ────────────────────────────────
-    const wingDip = -flap * height * 0.45; // how high the wing apex is
+    // ── Wings ─────────────────────────────────────────────
+    const wingDip = -flap * height * 0.45;
+    // Left
     c.beginPath();
-    c.moveTo(-width * 0.07, height * 0.0);  // shoulder
-    // main wing arc to tip
+    c.moveTo(-width * 0.07, height * 0.0);
     c.quadraticCurveTo(-width * 0.28, wingDip, -width * 0.50, -flap * height * 0.08);
-    // trailing edge back — finger-like serrations
     c.quadraticCurveTo(-width * 0.40, height * 0.14, -width * 0.33, height * 0.18);
     c.quadraticCurveTo(-width * 0.26, height * 0.08, -width * 0.22, height * 0.20);
     c.quadraticCurveTo(-width * 0.16, height * 0.10, -width * 0.12, height * 0.22);
     c.quadraticCurveTo(-width * 0.08, height * 0.14, -width * 0.07, height * 0.12);
     c.closePath();
     c.fill();
-
-    // ── Right wing membrane (mirrored) ────────────────────
+    // Right (mirror)
     c.beginPath();
-    c.moveTo(width * 0.07, height * 0.0);
-    c.quadraticCurveTo(width * 0.28, wingDip, width * 0.50, -flap * height * 0.08);
-    c.quadraticCurveTo(width * 0.40, height * 0.14, width * 0.33, height * 0.18);
-    c.quadraticCurveTo(width * 0.26, height * 0.08, width * 0.22, height * 0.20);
-    c.quadraticCurveTo(width * 0.16, height * 0.10, width * 0.12, height * 0.22);
-    c.quadraticCurveTo(width * 0.08, height * 0.14, width * 0.07, height * 0.12);
+    c.moveTo( width * 0.07, height * 0.0);
+    c.quadraticCurveTo( width * 0.28, wingDip,  width * 0.50, -flap * height * 0.08);
+    c.quadraticCurveTo( width * 0.40, height * 0.14,  width * 0.33, height * 0.18);
+    c.quadraticCurveTo( width * 0.26, height * 0.08,  width * 0.22, height * 0.20);
+    c.quadraticCurveTo( width * 0.16, height * 0.10,  width * 0.12, height * 0.22);
+    c.quadraticCurveTo( width * 0.08, height * 0.14,  width * 0.07, height * 0.12);
     c.closePath();
     c.fill();
 
-    // ── Tiny eyes ─────────────────────────────────────────
-    c.fillStyle = '#ff4400';
-    c.shadowBlur = 4;
-    c.shadowColor = '#ff2200';
+    // ── Eyes (flat fill, no shadow) ───────────────────────
+    c.fillStyle = '#cc2200';
     c.beginPath();
     c.ellipse(-width * 0.025, -height * 0.04, width * 0.018, height * 0.022, 0, 0, Math.PI * 2);
+    c.fill();
+    c.beginPath();
     c.ellipse( width * 0.025, -height * 0.04, width * 0.018, height * 0.022, 0, 0, Math.PI * 2);
     c.fill();
 
