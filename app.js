@@ -9,9 +9,21 @@ let openingAngle = 0; // 0 to Math.PI (0 to 180 degrees)
 let targetAngle = 0;
 let firstUserInteraction = false;
 
+// Export variables/functions to window for QUnit tests (placed at top for early access)
+window.cardApp = {
+    getCardOpen: () => cardOpen,
+    setCardOpen: (v) => { cardOpen = v; },
+    getMusicStarted: () => musicStarted,
+    setMusicStarted: (v) => { musicStarted = v; },
+    getSpookyAudio: () => spookyAudio,
+    setSpookyAudio: (audioObj) => { spookyAudio = audioObj; },
+    toggleCard: (e) => toggleCard(e),
+    startMusic: () => startMusic()
+};
+
 // Canvas setup
 const canvas = document.getElementById('animation-canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas ? canvas.getContext('2d') : null;
 // Helper to get active card element (prevents stale refs in unit test suites)
 function getCardElement() {
     return document.getElementById('halloween-card');
@@ -363,6 +375,7 @@ function spawnBats(x, y) {
 
 // --- Resize Handler ---
 function resizeCanvas() {
+    if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
@@ -432,6 +445,7 @@ function toggleCard(event) {
 // --- Main Animation Loop ---
 function animate() {
     requestAnimationFrame(animate);
+    if (!ctx) return; // safety check for headless or test environments
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Smoothly interpolate cover angle
@@ -471,17 +485,20 @@ if (getCardElement()) {
     getCardElement().addEventListener('click', toggleCard);
 }
 
-document.getElementById('sound-toggle').addEventListener('click', (e) => {
-    e.stopPropagation();
-    isMuted = !isMuted;
-    // If user un-mutes before any interaction, start ambient
-    if (!isMuted && !firstUserInteraction) {
-        firstUserInteraction = true;
-        startAmbient();
-    }
-    applyMuteState();
-    setSoundBtnIcon();
-});
+const soundToggleBtn = document.getElementById('sound-toggle');
+if (soundToggleBtn) {
+    soundToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isMuted = !isMuted;
+        // If user un-mutes before any interaction, start ambient
+        if (!isMuted && !firstUserInteraction) {
+            firstUserInteraction = true;
+            startAmbient();
+        }
+        applyMuteState();
+        setSoundBtnIcon();
+    });
+}
 
 // On first click/touch anywhere on the page, start ambient
 // (browser autoplay policy: audio requires user gesture)
@@ -494,19 +511,9 @@ document.addEventListener('click', handleFirstInteraction, { once: true });
 document.addEventListener('touchstart', handleFirstInteraction, { once: true });
 
 // Initial Setup
-resizeCanvas();
-initWebStrands();
-setSoundBtnIcon(); // set to unmuted icon initially
-requestAnimationFrame(animate);
-
-// Export variables/functions to window for QUnit tests
-window.cardApp = {
-    getCardOpen: () => cardOpen,
-    setCardOpen: (v) => { cardOpen = v; },
-    getMusicStarted: () => musicStarted,
-    setMusicStarted: (v) => { musicStarted = v; },
-    getSpookyAudio: () => spookyAudio,
-    setSpookyAudio: (audioObj) => { spookyAudio = audioObj; },
-    toggleCard: toggleCard,
-    startMusic: startMusic
-};
+if (canvas) {
+    resizeCanvas();
+    initWebStrands();
+    setSoundBtnIcon(); // set to unmuted icon initially
+    requestAnimationFrame(animate);
+}
