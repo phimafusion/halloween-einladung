@@ -56,7 +56,7 @@
                         <svg class="card-deco" viewBox="0 0 360 560" xmlns="http://www.w3.org/2000/svg"
                             aria-hidden="true">
                             <!-- Top-left: Friendly ghost (watercolor style) -->
-                            <g transform="translate(12, 8) scale(0.72)" opacity="0.55">
+                            <g transform="translate(12, 8) scale(0.72)" class="animated-ghost" opacity="0.55">
                                 <!-- Ghost body -->
                                 <ellipse cx="40" cy="30" rx="22" ry="25" fill="#e8d5f5" filter="url(#blur1)" />
                                 <path
@@ -74,7 +74,7 @@
                             </g>
 
                             <!-- Top-right: Witch hat -->
-                            <g transform="translate(270, -2) scale(0.65)" opacity="0.50">
+                            <g transform="translate(270, -2) scale(0.65)" class="animated-hat" opacity="0.50">
                                 <!-- Hat brim -->
                                 <ellipse cx="50" cy="72" rx="40" ry="8" fill="#3b1d5c" opacity="0.7" />
                                 <!-- Hat cone -->
@@ -89,7 +89,7 @@
                             </g>
 
                             <!-- Bottom-left: Small pumpkin -->
-                            <g transform="translate(4, 440) scale(0.60)" opacity="0.55">
+                            <g transform="translate(4, 440) scale(0.60)" class="animated-pumpkin" opacity="0.55">
                                 <ellipse cx="55" cy="55" rx="28" ry="30" fill="#e8821a" opacity="0.5"
                                     filter="url(#blur1)" />
                                 <!-- Pumpkin segments -->
@@ -195,22 +195,25 @@
                                     d="M60 25 Q80 30 87 50 Q90 70 80 87 Q65 95 48 87 Q30 80 28 60 Q28 40 45 28 Q52 24 60 25" />
                                 <path
                                     d="M60 42 Q72 45 77 58 Q78 70 70 78 Q62 83 52 78 Q43 72 42 60 Q42 47 52 43 Q56 41 60 42" />
-                            </g>
-                            <!-- Spider -->
-                            <g transform="translate(43, 72)" opacity="0.8">
-                                <ellipse cx="0" cy="0" rx="5" ry="4" fill="#2a1040" />
-                                <ellipse cx="0" cy="5" rx="4" ry="3" fill="#2a1040" />
-                                <g stroke="#2a1040" stroke-width="0.9" fill="none">
-                                    <line x1="-5" y1="0" x2="-11" y2="-4" />
-                                    <line x1="-5" y1="2" x2="-11" y2="2" />
-                                    <line x1="-5" y1="4" x2="-11" y2="7" />
-                                    <line x1="5" y1="0" x2="11" y2="-4" />
-                                    <line x1="5" y1="2" x2="11" y2="2" />
-                                    <line x1="5" y1="4" x2="11" y2="7" />
+                                <!-- Spider (dangling from thread) -->
+                            <g class="animated-spider-container">
+                                <!-- Dangling thread that extends dynamically -->
+                                <line x1="103" y1="60" x2="103" y2="132" class="spider-thread" stroke="#5a3a1a" stroke-width="0.8" opacity="0.6" />
+                                <g transform="translate(60, 60)" class="animated-spider" opacity="0.8">
+                                    <ellipse cx="0" cy="0" rx="5" ry="4" fill="#2a1040" />
+                                    <ellipse cx="0" cy="5" rx="4" ry="3" fill="#2a1040" />
+                                    <g stroke="#2a1040" stroke-width="0.9" fill="none">
+                                        <line x1="-5" y1="0" x2="-11" y2="-4" />
+                                        <line x1="-5" y1="2" x2="-11" y2="2" />
+                                        <line x1="-5" y1="4" x2="-11" y2="7" />
+                                        <line x1="5" y1="0" x2="11" y2="-4" />
+                                        <line x1="5" y1="2" x2="11" y2="2" />
+                                        <line x1="5" y1="4" x2="11" y2="7" />
+                                    </g>
                                 </g>
                             </g>
                         </g>
-
+ 
                         <!-- Top-left: Bat silhouette (watercolor) -->
                         <g transform="translate(10, 22) scale(0.55)" opacity="0.45">
                             <ellipse cx="50" cy="25" rx="30" ry="12" fill="#3b1d5c" filter="url(#blur2)"
@@ -224,7 +227,7 @@
                             <path d="M44 22 L42 15 L48 20 Z" fill="#2a1040" />
                             <path d="M56 22 L58 15 L52 20 Z" fill="#2a1040" />
                         </g>
-
+ 
                         <!-- Second bat smaller top-right area -->
                         <g transform="translate(300, 80) scale(0.38)" opacity="0.38">
                             <path
@@ -232,9 +235,9 @@
                                 fill="#2a1040" />
                             <ellipse cx="50" cy="30" rx="8" ry="10" fill="#2a1040" />
                         </g>
-
+ 
                         <!-- Bottom-left: Two small pumpkins -->
-                        <g transform="translate(-5, 460) scale(0.50)" opacity="0.55">
+                        <g transform="translate(-5, 460) scale(0.50)" class="animated-pumpkins-right" opacity="0.55">
                             <!-- Pumpkin A -->
                             <path d="M22 45 Q26 22 44 20 Q62 22 66 45 Q62 68 44 70 Q26 68 22 45 Z" fill="#d97010"
                                 opacity="0.85" />
@@ -247,7 +250,7 @@
                             <path d="M42 20 Q40 10 45 6 Q48 14 46 20" fill="#5a3010" opacity="0.7" />
                             <!-- Pumpkin B (smaller, to the right) -->
                             <g transform="translate(55, 15) scale(0.65)">
-                                <path d="M22 45 Q26 22 44 20 Q62 22 66 45 Q62 68 44 70 Q26 68 22 45 Z" fill="#c86010"
+                                <path d="M22 45 Q26 22 44 20 Q62 22 66 45 Q62 68 44 70 Q26 68 22 45 Z" fill="#c86010"26 68 22 45 Z" fill="#c86010"
                                     opacity="0.75" />
                                 <path d="M38 42 L42 37 L46 42 Z" fill="#1c0a04" opacity="0.85" />
                                 <path d="M48 42 L52 37 L56 42 Z" fill="#1c0a04" opacity="0.85" />

@@ -637,3 +637,80 @@ body {
     z-index: 15;
     pointer-events: none;
 }
+
+/* ── SVG Inner Page Micro-Animations ───────────────────────────────── */
+
+/* 1. Floating Ghost */
+@keyframes floatGhost {
+    0%, 100% {
+        transform: translate(12px, 8px) scale(0.72) translateY(0);
+    }
+    50% {
+        transform: translate(12px, 8px) scale(0.72) translateY(-6px) rotate(1deg);
+    }
+}
+.animated-ghost {
+    animation: floatGhost 6s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+/* 2. Swaying Witch Hat */
+@keyframes swayHat {
+    0%, 100% {
+        transform: translate(270, -2) scale(0.65) rotate(-3deg);
+    }
+    50% {
+        transform: translate(270, -2) scale(0.65) rotate(3deg);
+    }
+}
+.animated-hat {
+    animation: swayHat 5s ease-in-out infinite;
+    transform-origin: 50% 80%; /* bottom-center of the hat */
+}
+
+/* 3. Dangling & Crawling Spider */
+@keyframes crawlSpider {
+    0%, 100% {
+        transform: translate(103px, 60px) scale(0.75); /* Top position */
+    }
+    50% {
+        transform: translate(103px, 120px) scale(0.75); /* Drops down by 60px */
+    }
+}
+@keyframes stretchThread {
+    0%, 100% {
+        transform: scaleY(0);
+    }
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+.animated-spider-container {
+    transform-origin: 103px 60px;
+}
+
+.animated-spider {
+    /* Translate the spider itself, centered at 103,60. Offset is handled in keyframes */
+    animation: crawlSpider 8s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+.spider-thread {
+    transform-origin: 103px 60px;
+    animation: stretchThread 8s ease-in-out infinite;
+}
+
+/* 4. Interactive Pumpkin Tilts (on hover of the card sections) */
+.face.back:hover .animated-pumpkin {
+    transform: translate(4px, 440) scale(0.60) rotate(-6deg);
+}
+.card-back:hover .animated-pumpkins-right {
+    transform: translate(-5, 460) scale(0.50) rotate(5deg);
+}
+
+.animated-pumpkin, .animated-pumpkins-right {
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform-origin: center bottom;
+}
+
