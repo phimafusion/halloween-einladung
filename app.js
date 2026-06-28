@@ -336,11 +336,11 @@ function toggleCard(event) {
             }
         }
 
-        // Mobile Phase 2: after 3D flip completes, slide inner-right page in below
+        // Mobile Phase 2: after fly-away transition completes, slide inner-right page in below
         if (window.innerWidth <= 600) {
             setTimeout(() => {
                 if (perspective) perspective.classList.add('card-pages-visible');
-            }, 1300);
+            }, 2200);
         }
     } else {
         if (card) card.classList.remove('open');

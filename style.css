@@ -185,7 +185,7 @@ body {
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform 2.0s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer;
     /* Move center when closed so the single folded page is centered on screen */
     transform: translateX(0);
@@ -235,7 +235,7 @@ body {
 
     /* ONLY the front cover face flies away to the top-right */
     .card-container.open .face.front {
-        animation: coverFlyAway 1.1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        animation: coverFlyAway 2.0s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
         transform-origin: center center;
         pointer-events: none;
         z-index: 10 !important;
@@ -321,7 +321,7 @@ body {
     left: 0;
     transform-origin: left center;
     transform-style: preserve-3d;
-    transition: transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform 2.0s cubic-bezier(0.25, 0.8, 0.25, 1);
     z-index: 5;
     box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
     border-radius: 12px;
