@@ -201,60 +201,88 @@ body {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 600px) {
-    /* ── PHASE 1: 3D flip (same CSS transition as desktop) ──────────────── */
-    /* Prevent horizontal overflow — no translateX shift */
-    .card-container.open {
-        transform: translateX(0) !important;
+@keyframes mobilePageIn {
+    from { opacity: 0; transform: translateY(35px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes coverFlyAway {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 1;
     }
-    /* Card stays at single-page width while flipping */
+    100% {
+        transform: translate(110vw, -120vh) rotate(55deg) scale(0.6);
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+@media (max-width: 600px) {
+    /* ── PHASE 1: Deckblatt flies off & Page 1 is immediately shown flat ── */
     .card-perspective {
         width: 88vw;
         max-width: 360px;
+        position: relative;
     }
 
-    /* ── PHASE 2: After flip — vertical stack ───────────────────────────── */
+    /* Container layout does not translate sideways */
+    .card-container.open {
+        transform: none !important;
+        transition: none !important;
+    }
 
+    /* Cover flies away to the top-right */
+    .card-container.open .card-cover {
+        animation: coverFlyAway 1.1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        transform-origin: center center;
+        pointer-events: none;
+    }
+
+    /* Immediately show the inner-left page (Die Feier) in the base card-back position. 
+       To do this, we place the inner-left page content (face.back) inside the container 
+       without rotation, so it's visible underneath the flying cover. */
+    .card-perspective.card-open .face.back {
+        transform: none !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 4; /* Below flying cover, above background */
+        backface-visibility: visible !important;
+        -webkit-backface-visibility: visible !important;
+        visibility: visible !important;
+    }
+
+    /* ── PHASE 2: After 1.3s vertical stack unfolds ── */
     .card-perspective.card-open.card-pages-visible {
         height: auto;
     }
 
-    /* Flex column layout, no 3D translation */
     .card-perspective.card-open.card-pages-visible .card-container {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         height: auto;
-        transform: none !important;
     }
 
-    /* Cover: flatten immediately (no transition) and show as top panel */
+    /* Top panel (Page 1) is now static in the vertical flex flow */
     .card-perspective.card-open.card-pages-visible .card-cover {
+        display: none !important; /* Hide cover completely after it flies off */
+    }
+
+    .card-perspective.card-open.card-pages-visible .face.back {
         position: relative !important;
         width: 100%;
         height: var(--card-h);
         max-height: var(--card-max-h);
-        /* Snap flat — no transition so the switch is instant after flip completes */
-        transition: none !important;
-        transform: rotateY(0deg) !important;
-        transform-style: flat !important;
         box-shadow: 0 6px 24px rgba(0,0,0,0.30);
         border-radius: 12px;
+        display: block !important;
     }
 
-    /* Hide the outer front face (cover image) */
-    .card-perspective.card-open.card-pages-visible .face.front {
-        display: none;
-    }
-
-    /* Show inner-left page flat — override 3D backface behavior */
-    .card-perspective.card-open.card-pages-visible .face.back {
-        transform: none !important;
-        backface-visibility: visible !important;
-        -webkit-backface-visibility: visible !important;
-    }
-
-    /* Card-back: second panel slides up from below */
+    /* Bottom panel (Page 2 / timeline) slides up from below */
     .card-perspective.card-open.card-pages-visible .card-back {
         position: relative !important;
         top: 0 !important;
@@ -263,10 +291,10 @@ body {
         max-height: var(--card-max-h);
         box-shadow: 0 6px 24px rgba(0,0,0,0.30);
         border-radius: 12px;
+        z-index: 5;
         animation: mobilePageIn 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     }
 
-    /* Reset translateZ — not needed in flat flex context */
     .card-perspective.card-open.card-pages-visible .inner-content {
         transform: none;
     }
