@@ -196,37 +196,89 @@ body {
     transform: translateX(25%);
 }
 
+@keyframes mobilePageIn {
+    from { opacity: 0; transform: translateY(-24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 600px) {
-    /* When open: shrink perspective so both pages fit (46vw each = 92vw total) */
+    /* Disable the 3D flip — handle visuals via vertical layout instead */
+    .card-cover,
+    .card-container {
+        transition: none;
+    }
+
+    /* ── OPEN STATE: vertical stack ────────────────── */
     .card-perspective.card-open {
-        width: 46vw;
-        max-width: 220px;
-        height: 71vw;
-        max-height: 340px;
+        width: 88vw;
+        max-width: 360px;
+        height: auto; /* grow to fit both stacked pages */
     }
-    /* Re-center: translateX(50%) of the now-46vw container = 23vw shift */
-    .card-perspective.card-open .card-container.open {
-        transform: translateX(50%);
+
+    /* Container: flex column, no 3D transform */
+    .card-perspective.card-open .card-container {
+        transform: none !important;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        height: auto;
+        transform-style: flat;
     }
-    /* Scale down text in the inner pages to fit */
-    .card-perspective.card-open .section-title.gothic {
-        font-size: 1.1rem;
+
+    /* Card cover becomes the top panel (inner-left page) */
+    .card-perspective.card-open .card-cover {
+        position: relative !important;
+        width: 100%;
+        height: var(--card-h);
+        max-height: var(--card-max-h);
+        transform: none !important;
+        transform-style: flat;
+        border-radius: 12px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+        animation: mobilePageIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     }
-    .card-perspective.card-open .spooky-lead {
-        font-size: 0.7rem;
+
+    /* Hide the outer front face — we're showing the inner-left face */
+    .card-perspective.card-open .face.front {
+        visibility: hidden;
+        pointer-events: none;
     }
-    .card-perspective.card-open .invitation-text,
-    .card-perspective.card-open .menu-list li,
-    .card-perspective.card-open .timeline-item,
-    .card-perspective.card-open .footer-note p {
-        font-size: 0.6rem;
+
+    /* Show inner-left page flat (no 3D rotation needed) */
+    .card-perspective.card-open .face.back {
+        transform: none !important;
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        backface-visibility: visible !important;
+        -webkit-backface-visibility: visible !important;
+        visibility: visible;
     }
+
+    /* Card-back becomes the bottom panel (inner-right page) */
+    .card-perspective.card-open .card-back {
+        position: relative !important;
+        top: 0 !important;
+        width: 100%;
+        height: var(--card-h);
+        max-height: var(--card-max-h);
+        border-radius: 12px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+        animation: mobilePageIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) 0.12s both;
+    }
+
+    /* inner-content: no translateZ needed in flat context */
     .card-perspective.card-open .inner-content {
-        padding: 14px 10px;
+        transform: none;
+        padding: 20px 16px;
     }
-    .card-perspective.card-open .menu-box,
-    .card-perspective.card-open .timeline {
-        gap: 4px;
+
+    /* ── CLOSED STATE: single front card ───────────── */
+    .card-perspective:not(.card-open) {
+        width: 88vw;
+        max-width: 360px;
+        height: var(--card-h);
+        max-height: var(--card-max-h);
     }
 }
 
@@ -347,6 +399,7 @@ body {
     z-index: 1;
     box-shadow: inset 0 0 30px rgba(0,0,0,0.1), 3px 3px 10px rgba(0,0,0,0.2);
     overflow: hidden;
+    isolation: isolate; /* own stacking context for reliable z-index in all browsers */
 }
 
 /* Inside Back Cover (Left Side inside) */
@@ -388,9 +441,6 @@ body {
 /* Inner Page Content Layout */
 .inner-content {
     position: relative;
-    /* translateZ(2px) lifts text above SVG decorations in the 3D render context.
-       This is more reliable than z-index alone on iOS Safari / preserve-3d elements. */
-    transform: translateZ(2px);
     z-index: 10;
     width: 100%;
     height: 100%;
@@ -542,12 +592,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    /* z-index alone is unreliable in 3D-transform contexts on iOS Safari.
-       translateZ(0) keeps it in the base plane. */
-    transform: translateZ(0);
     z-index: 1;
     pointer-events: none;
-    overflow: visible;
+    overflow: hidden; /* prevent Firefox rendering SVG outside face bounds */
 }
 
 /* Canvas Overlay covering full viewport for bats and snapping webs */
