@@ -340,7 +340,7 @@ function toggleCard(event) {
         if (window.innerWidth <= 600) {
             setTimeout(() => {
                 if (perspective) perspective.classList.add('card-pages-visible');
-            }, 2200);
+            }, 3700);
         }
     } else {
         if (card) card.classList.remove('open');
