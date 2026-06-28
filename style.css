@@ -504,6 +504,18 @@ body {
     color: #3b1d5c;
 }
 
+/* SVG watercolor decorations overlaying the inner card pages */
+.card-deco {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;        /* sits between bg and text content (z-index 2) */
+    pointer-events: none;
+    overflow: visible;
+}
+
 /* Canvas Overlay covering full viewport for bats and snapping webs */
 #animation-canvas {
     position: absolute;
