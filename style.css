@@ -197,88 +197,63 @@ body {
 }
 
 @keyframes mobilePageIn {
-    from { opacity: 0; transform: translateY(-24px); }
+    from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 600px) {
-    /* Disable the 3D flip — handle visuals via vertical layout instead */
-    .card-cover,
-    .card-container {
-        transition: none;
+    /* ── PHASE 1: 3D flip (same CSS transition as desktop) ─────────────── */
+    /* Prevent horizontal overflow — no translateX shift on mobile */
+    .card-container.open {
+        transform: translateX(0) !important;
     }
 
-    /* ── OPEN STATE: vertical stack ────────────────── */
-    .card-perspective.card-open {
+    /* Card stays at single-page size while flipping */
+    .card-perspective {
         width: 88vw;
         max-width: 360px;
-        height: auto; /* grow to fit both stacked pages */
     }
 
-    /* Container: flex column, no 3D transform */
-    .card-perspective.card-open .card-container {
-        transform: none !important;
+    /* ── PHASE 2: After flip — vertical stack ────────────────────────────── */
+
+    /* Expand height to hold both pages */
+    .card-perspective.card-open.card-pages-visible {
+        height: auto;
+    }
+
+    /* Container: flex column, drop the 3D translation */
+    .card-perspective.card-open.card-pages-visible .card-container {
         display: flex;
         flex-direction: column;
         gap: 10px;
         height: auto;
-        transform-style: flat;
+        transform: none !important;
     }
 
-    /* Card cover becomes the top panel (inner-left page) */
-    .card-perspective.card-open .card-cover {
+    /* Cover becomes top panel — keep it relative so it flows in flex */
+    .card-perspective.card-open.card-pages-visible .card-cover {
         position: relative !important;
         width: 100%;
         height: var(--card-h);
         max-height: var(--card-max-h);
-        transform: none !important;
-        transform-style: flat;
-        border-radius: 12px;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.28);
-        animation: mobilePageIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+        /* cover is already rotated −180° → .face.back is showing correctly */
+        box-shadow: 0 6px 24px rgba(0,0,0,0.30);
     }
 
-    /* Hide the outer front face — we're showing the inner-left face */
-    .card-perspective.card-open .face.front {
-        visibility: hidden;
-        pointer-events: none;
-    }
-
-    /* Show inner-left page flat (no 3D rotation needed) */
-    .card-perspective.card-open .face.back {
-        transform: none !important;
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        backface-visibility: visible !important;
-        -webkit-backface-visibility: visible !important;
-        visibility: visible;
-    }
-
-    /* Card-back becomes the bottom panel (inner-right page) */
-    .card-perspective.card-open .card-back {
+    /* Card-back: second panel slides in below */
+    .card-perspective.card-open.card-pages-visible .card-back {
         position: relative !important;
         top: 0 !important;
         width: 100%;
         height: var(--card-h);
         max-height: var(--card-max-h);
-        border-radius: 12px;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.28);
-        animation: mobilePageIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) 0.12s both;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.30);
+        animation: mobilePageIn 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     }
 
-    /* inner-content: no translateZ needed in flat context */
-    .card-perspective.card-open .inner-content {
+    /* Reset translateZ — not needed in flat flex context */
+    .card-perspective.card-open.card-pages-visible .inner-content {
         transform: none;
-        padding: 20px 16px;
-    }
-
-    /* ── CLOSED STATE: single front card ───────────── */
-    .card-perspective:not(.card-open) {
-        width: 88vw;
-        max-width: 360px;
-        height: var(--card-h);
-        max-height: var(--card-max-h);
     }
 }
 

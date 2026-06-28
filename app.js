@@ -22,26 +22,68 @@ const bats = [];
 const webStrands = [];
 const MAX_BATS = 25;
 
-// Bat path SVG helper
-// Stylized bat silhouette: drawn relative to center (0, 0)
+// Bat silhouette — body + ears + articulated wings with wingtip fingers
 function drawBatPath(c, x, y, width, height, flapFactor) {
     c.save();
     c.translate(x, y);
-    c.fillStyle = '#1b122c';
+    const flap = Math.abs(flapFactor); // 0..1
+
+    // Shadow/glow for depth
+    c.shadowColor = 'rgba(80,0,120,0.55)';
+    c.shadowBlur = 8;
+    c.fillStyle = '#180e28';
+
+    // ── Body ─────────────────────────────────────────────
     c.beginPath();
-    
-    // Left Wing
-    c.moveTo(0, -height * 0.2);
-    c.quadraticCurveTo(-width * 0.3, -height * 0.8 * flapFactor, -width * 0.5, -height * 0.3 * flapFactor);
-    c.quadraticCurveTo(-width * 0.35, height * 0.1, -width * 0.2, height * 0.2);
-    c.quadraticCurveTo(-width * 0.1, height * 0.5, 0, height * 0.4);
-    
-    // Right Wing (mirrored)
-    c.quadraticCurveTo(width * 0.1, height * 0.5, width * 0.2, height * 0.2);
-    c.quadraticCurveTo(width * 0.35, height * 0.1, width * 0.5, -height * 0.3 * flapFactor);
-    c.quadraticCurveTo(width * 0.3, -height * 0.8 * flapFactor, 0, -height * 0.2);
-    
+    c.ellipse(0, height * 0.05, width * 0.07, height * 0.18, 0, 0, Math.PI * 2);
     c.fill();
+
+    // ── Ears ──────────────────────────────────────────────
+    c.beginPath();
+    // Left ear
+    c.moveTo(-width * 0.055, -height * 0.06);
+    c.lineTo(-width * 0.12, -height * 0.34 - flap * height * 0.04);
+    c.lineTo(-width * 0.01, -height * 0.07);
+    // Right ear
+    c.moveTo(width * 0.055, -height * 0.06);
+    c.lineTo(width * 0.12, -height * 0.34 - flap * height * 0.04);
+    c.lineTo(width * 0.01, -height * 0.07);
+    c.fill();
+
+    // ── Left wing membrane ────────────────────────────────
+    const wingDip = -flap * height * 0.45; // how high the wing apex is
+    c.beginPath();
+    c.moveTo(-width * 0.07, height * 0.0);  // shoulder
+    // main wing arc to tip
+    c.quadraticCurveTo(-width * 0.28, wingDip, -width * 0.50, -flap * height * 0.08);
+    // trailing edge back — finger-like serrations
+    c.quadraticCurveTo(-width * 0.40, height * 0.14, -width * 0.33, height * 0.18);
+    c.quadraticCurveTo(-width * 0.26, height * 0.08, -width * 0.22, height * 0.20);
+    c.quadraticCurveTo(-width * 0.16, height * 0.10, -width * 0.12, height * 0.22);
+    c.quadraticCurveTo(-width * 0.08, height * 0.14, -width * 0.07, height * 0.12);
+    c.closePath();
+    c.fill();
+
+    // ── Right wing membrane (mirrored) ────────────────────
+    c.beginPath();
+    c.moveTo(width * 0.07, height * 0.0);
+    c.quadraticCurveTo(width * 0.28, wingDip, width * 0.50, -flap * height * 0.08);
+    c.quadraticCurveTo(width * 0.40, height * 0.14, width * 0.33, height * 0.18);
+    c.quadraticCurveTo(width * 0.26, height * 0.08, width * 0.22, height * 0.20);
+    c.quadraticCurveTo(width * 0.16, height * 0.10, width * 0.12, height * 0.22);
+    c.quadraticCurveTo(width * 0.08, height * 0.14, width * 0.07, height * 0.12);
+    c.closePath();
+    c.fill();
+
+    // ── Tiny eyes ─────────────────────────────────────────
+    c.fillStyle = '#ff4400';
+    c.shadowBlur = 4;
+    c.shadowColor = '#ff2200';
+    c.beginPath();
+    c.ellipse(-width * 0.025, -height * 0.04, width * 0.018, height * 0.022, 0, 0, Math.PI * 2);
+    c.ellipse( width * 0.025, -height * 0.04, width * 0.018, height * 0.022, 0, 0, Math.PI * 2);
+    c.fill();
+
     c.restore();
 }
 
@@ -270,52 +312,51 @@ class WebStrand {
     }
 
     draw(xLeft, xRight, y) {
-        ctx.strokeStyle = `rgba(235, 230, 220, ${this.opacity})`;
-        ctx.lineWidth = this.snapped ? Math.max(0.1, 1 - this.snapProgress) : 1.2;
+        // More visible: orange-tinted strands with glow
+        ctx.strokeStyle = this.snapped
+            ? `rgba(210, 180, 140, ${this.opacity * (1 - this.snapProgress)})`
+            : `rgba(235, 215, 180, ${this.opacity})`;
+        ctx.lineWidth = this.snapped ? Math.max(0.3, 2.2 * (1 - this.snapProgress)) : 2.2;
         ctx.lineCap = 'round';
-        ctx.shadowColor = 'rgba(0,0,0,0.15)';
-        ctx.shadowBlur = 2;
+        ctx.shadowColor = 'rgba(255, 180, 80, 0.35)';
+        ctx.shadowBlur = 4;
         ctx.beginPath();
-        
+
         if (!this.snapped) {
-            // Draw a curved line to represent droop
             const midX = (xLeft + xRight) / 2;
             const midY = y + this.slack;
             ctx.moveTo(xLeft, y);
             ctx.quadraticCurveTo(midX, midY, xRight, y);
             ctx.stroke();
         } else {
-            // Retract the snapped ends
             if (this.snapProgress < 1) {
                 const midX = (xLeft + xRight) / 2;
                 const snapX = midX;
                 const snapY = y + this.slack;
-                
-                // Left half retracting
-                const leftEndX = xLeft + (snapX - xLeft) * (1 - this.snapProgress);
-                const leftEndY = y + (snapY - y) * (1 - this.snapProgress);
+
+                const leftEndX  = xLeft  + (snapX - xLeft)  * (1 - this.snapProgress);
+                const leftEndY  = y      + (snapY - y)       * (1 - this.snapProgress);
                 ctx.moveTo(xLeft, y);
-                ctx.quadraticCurveTo((xLeft + leftEndX)/2, y + this.slack/2, leftEndX, leftEndY);
-                
-                // Right half retracting
+                ctx.quadraticCurveTo((xLeft + leftEndX) / 2, y + this.slack / 2, leftEndX, leftEndY);
+
                 const rightEndX = xRight - (xRight - snapX) * (1 - this.snapProgress);
-                const rightEndY = y + (snapY - y) * (1 - this.snapProgress);
+                const rightEndY = y      + (snapY - y)       * (1 - this.snapProgress);
                 ctx.moveTo(xRight, y);
-                ctx.quadraticCurveTo((xRight + rightEndX)/2, y + this.slack/2, rightEndX, rightEndY);
-                
+                ctx.quadraticCurveTo((xRight + rightEndX) / 2, y + this.slack / 2, rightEndX, rightEndY);
+
                 ctx.stroke();
             }
         }
-        ctx.shadowBlur = 0; // reset
+        ctx.shadowBlur = 0;
     }
 }
 
 // --- Setup/Initialize Web Strands ---
 function initWebStrands() {
     webStrands.length = 0;
-    // Spawn 8 web strands down the crease
-    for (let i = 0; i < 8; i++) {
-        const relY = 0.15 + (i * 0.1) + Math.random() * 0.05; // distribute along the middle
+    // 12 strands for better visibility
+    for (let i = 0; i < 12; i++) {
+        const relY = 0.08 + (i * 0.075) + Math.random() * 0.03;
         webStrands.push(new WebStrand(relY, 40));
     }
 }
@@ -357,8 +398,8 @@ function toggleCard(event) {
 
         // Spawn bats from the crease
         const rect = getCardElement() ? getCardElement().getBoundingClientRect() : { left: 0, top: 0, height: 0, width: 0 };
-        const creaseX = rect.left;
-        const centerY = rect.top + rect.height / 2;
+        const creaseX = rect.left + rect.width * 0.5; // center of card for mobile
+        const centerY = rect.top + rect.height * 0.35;
         spawnBats(creaseX, centerY);
 
         // Reset webs
@@ -369,10 +410,19 @@ function toggleCard(event) {
             stopAmbient();
             playEvilLaugh(() => startMusic());
         }
-        // On subsequent opens: music is already running, nothing to change
+
+        // Mobile Phase 2: after 3D flip completes, slide inner-right page in below
+        if (window.innerWidth <= 600) {
+            setTimeout(() => {
+                if (perspective) perspective.classList.add('card-pages-visible');
+            }, 1300);
+        }
     } else {
         if (card) card.classList.remove('open');
-        if (perspective) perspective.classList.remove('card-open');
+        if (perspective) {
+            perspective.classList.remove('card-open');
+            perspective.classList.remove('card-pages-visible');
+        }
         targetAngle = 0;
         // Music keeps playing when card closes
     }
