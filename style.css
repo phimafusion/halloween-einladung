@@ -176,7 +176,7 @@ body {
     height: var(--card-h);
     max-width: var(--card-max-w);
     max-height: var(--card-max-h);
-    margin: auto;
+    margin: 0;
     z-index: 10;
 }
 
