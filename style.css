@@ -504,8 +504,9 @@ body {
 .section-title.gothic {
     font-family: var(--font-spooky);
     font-size: 1.9rem;
-    letter-spacing: 1px;
-    color: #3b1d5c;
+    letter-spacing: 1.5px;
+    color: #1c0e29;
+    text-shadow: 0 0 10px rgba(255, 122, 0, 0.65), 0 0 3px rgba(255, 122, 0, 0.9);
 }
 
 .spooky-lead {
@@ -560,28 +561,42 @@ body {
 
 /* Timeline on Right Page */
 .timeline {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin: 10px 0;
+    gap: 28px; /* Entzerrter Abstand */
+    margin: 15px 0;
+    padding-left: 24px;
+}
+
+/* Durchgehende Linie auf dem Container */
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 5px;
+    bottom: 5px;
+    width: 2px;
+    background: var(--h-purple);
+    opacity: 0.6;
 }
 
 .timeline-item {
     position: relative;
-    padding-left: 15px;
-    border-left: 2px solid var(--h-purple);
+    padding-left: 12px;
 }
 
-.timeline-item::before {
-    content: '';
+/* Die Emojis sitzen genau zentriert auf der Linie */
+.timeline-icon {
     position: absolute;
-    left: -6px;
-    top: 3px;
-    width: 10px;
-    height: 10px;
+    left: -26px; /* Zentriert auf die 8px Position der Linie (16px breit / 2) */
+    top: 2px;
+    font-size: 1.1rem;
+    background: var(--wc-beige); /* Maskiert die Linie dahinter */
+    padding: 1px 3px;
     border-radius: 50%;
-    background: var(--h-orange);
-    border: 2px solid var(--wc-beige);
+    line-height: 1;
+    display: inline-block;
 }
 
 .time {
