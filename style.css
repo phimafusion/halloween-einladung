@@ -601,15 +601,20 @@ body {
 
 .time {
     display: block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #3b1d5c;
-    margin-bottom: 1px;
+    font-family: var(--font-spooky);
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    color: var(--h-orange);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+    margin-bottom: 2px;
 }
 
 .event {
     display: block;
-    font-size: 0.8rem;
+    font-family: var(--font-watercolor);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2b1442;
     line-height: 1.3;
 }
 
