@@ -726,20 +726,33 @@ body {
     transform-origin: center bottom;
 }
 
-/* 5. Menu Icons Wiggle on Hover */
+/* 5. Menu Icons Continuous Wiggle */
 @keyframes wiggleIcon {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    25% { transform: rotate(-8deg) scale(1.15); }
-    75% { transform: rotate(8deg) scale(1.15); }
+    0%, 100% { transform: rotate(0deg); }
+    33% { transform: rotate(-6deg) scale(1.05); }
+    66% { transform: rotate(6deg) scale(1.05); }
+}
+
+@keyframes hoverWiggle {
+    0%, 100% { transform: rotate(0deg) scale(1.15); }
+    25% { transform: rotate(-10deg) scale(1.20); }
+    75% { transform: rotate(10deg) scale(1.20); }
 }
 
 .menu-icon {
     display: inline-block;
     transition: transform 0.3s ease;
     transform-origin: center center;
+    animation: wiggleIcon 3s ease-in-out infinite;
 }
 
+/* Stagger animations for a less robotic feel */
+.menu-list li:nth-child(1) .menu-icon { animation-delay: 0s; }
+.menu-list li:nth-child(2) .menu-icon { animation-delay: 0.5s; }
+.menu-list li:nth-child(3) .menu-icon { animation-delay: 1s; }
+.menu-list li:nth-child(4) .menu-icon { animation-delay: 1.5s; }
+
 .menu-list li:hover .menu-icon {
-    animation: wiggleIcon 0.5s ease-in-out infinite alternate;
+    animation: hoverWiggle 0.4s ease-in-out infinite alternate;
 }
 
