@@ -55,216 +55,40 @@ function drawBatPath(c, x, y, width, height, flapFactor) {
     c.restore();
 }
 
-// --- Spooky Ambient Synthesizer ---
+// --- Audio setup ---
+let spookyAudio = null;
+
 function initSynth() {
-    if (audioCtx) return;
-    
-    // Create AudioContext
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    audioCtx = new AudioContextClass();
-    
-    // Master Gain
-    masterGain = audioCtx.createGain();
-    masterGain.gain.setValueAtTime(0, audioCtx.currentTime); // Start silent
-    masterGain.connect(audioCtx.destination);
-    
-    // 1. Low Spooky Drone
-    // Oscillator 1: Sawtooth or Triangle at low frequency (55Hz / A1)
-    const osc1 = audioCtx.createOscillator();
-    osc1.type = 'triangle';
-    osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
-    
-    // Oscillator 2: Detuned slightly (55.5Hz)
-    const osc2 = audioCtx.createOscillator();
-    osc2.type = 'sawtooth';
-    osc2.frequency.setValueAtTime(55.5, audioCtx.currentTime);
-    
-    const droneFilter = audioCtx.createBiquadFilter();
-    droneFilter.type = 'lowpass';
-    droneFilter.frequency.setValueAtTime(120, audioCtx.currentTime);
-    
-    const droneGain = audioCtx.createGain();
-    droneGain.gain.setValueAtTime(0.06, audioCtx.currentTime); // Low volume
-    
-    // Connect Drone
-    osc1.connect(droneFilter);
-    osc2.connect(droneFilter);
-    droneFilter.connect(droneGain);
-    droneGain.connect(masterGain);
-    
-    // Drone LFO to modulate volume slowly (creepy breathing effect)
-    droneLfo = audioCtx.createOscillator();
-    droneLfo.frequency.setValueAtTime(0.2, audioCtx.currentTime); // 0.2 Hz
-    const lfoGain = audioCtx.createGain();
-    lfoGain.gain.setValueAtTime(0.02, audioCtx.currentTime);
-    
-    droneLfo.connect(lfoGain);
-    lfoGain.connect(droneGain.gain);
-    
-    osc1.start();
-    osc2.start();
-    droneLfo.start();
-    
-    // 2. Wind sweep effect (filtered noise)
-    // Generate white noise buffer
-    const bufferSize = audioCtx.sampleRate * 2;
-    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const output = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
-    }
-    
-    noiseNode = audioCtx.createBufferSource();
-    noiseNode.buffer = noiseBuffer;
-    noiseNode.loop = true;
-    
-    windFilter = audioCtx.createBiquadFilter();
-    windFilter.type = 'bandpass';
-    windFilter.Q.setValueAtTime(3.0, audioCtx.currentTime);
-    windFilter.frequency.setValueAtTime(400, audioCtx.currentTime);
-    
-    const windGain = audioCtx.createGain();
-    windGain.gain.setValueAtTime(0.015, audioCtx.currentTime); // very quiet
-    
-    noiseNode.connect(windFilter);
-    windFilter.connect(windGain);
-    windGain.connect(masterGain);
-    
-    noiseNode.start();
-    
-    // Animate wind filter sweeps
-    setInterval(() => {
-        if (!isMuted && audioCtx.state === 'running') {
-            const now = audioCtx.currentTime;
-            // Sweep frequency between 300Hz and 900Hz slowly
-            const targetFreq = 300 + Math.random() * 600;
-            const sweepDuration = 3 + Math.random() * 4;
-            windFilter.frequency.exponentialRampToValueAtTime(targetFreq, now + sweepDuration);
+    if (synthRunning) return;
+    try {
+        if (!spookyAudio) {
+            spookyAudio = new Audio('assets/rhps_time_warp_song_cut.mp3');
+            spookyAudio.loop = true;
+            spookyAudio.volume = 0.3; // atmospheric volume
         }
-    }, 5000);
-    
-    // 3. Time Warp Spooky Sequencer
-    nextNoteTime = audioCtx.currentTime;
-    sequencerInterval = setInterval(scheduleNotes, 50);
-    
+        spookyAudio.play().catch(e => console.log("Audio play blocked by browser:", e));
+    } catch(err) {
+        console.log("Audio not supported or mocked:", err);
+    }
     synthRunning = true;
-}
-
-// Time Warp Melody definition
-const A3 = 220.00;
-const C4 = 261.63;
-const D4 = 293.66;
-const E4 = 329.63;
-const F4 = 349.23;
-const G4 = 392.00;
-const A4 = 440.00;
-const R = 0; // Rest
-
-const timeWarpMelody = [
-    // It's just a jump to the left
-    { f: E4, d: 0.5 }, { f: E4, d: 0.5 }, { f: E4, d: 0.5 }, { f: E4, d: 0.5 },
-    { f: D4, d: 0.5 }, { f: C4, d: 0.5 }, { f: A3, d: 1.0 }, { f: R, d: 0.5 },
-    // And then a step to the right
-    { f: E4, d: 0.5 }, { f: E4, d: 0.5 }, { f: E4, d: 0.5 }, { f: E4, d: 0.5 },
-    { f: G4, d: 0.5 }, { f: E4, d: 1.5 }, { f: R, d: 0.5 },
-    // With your hands on your hips
-    { f: E4, d: 0.5 }, { f: E4, d: 0.5 }, { f: E4, d: 0.5 }, { f: D4, d: 0.5 },
-    { f: C4, d: 0.5 }, { f: A3, d: 1.0 }, { f: R, d: 0.5 },
-    // You bring your knees in tight
-    { f: E4, d: 0.5 }, { f: E4, d: 0.5 }, { f: E4, d: 0.5 }, { f: G4, d: 0.5 },
-    { f: E4, d: 1.5 }, { f: R, d: 0.5 },
-    // But it's the pelvic thrust
-    { f: A4, d: 0.5 }, { f: A4, d: 0.5 }, { f: A4, d: 0.5 }, { f: G4, d: 0.5 },
-    { f: F4, d: 0.5 }, { f: E4, d: 0.5 }, { f: D4, d: 1.0 }, { f: R, d: 0.5 },
-    // That really drives you insane
-    { f: E4, d: 0.5 }, { f: F4, d: 0.5 }, { f: G4, d: 0.5 }, { f: E4, d: 0.5 },
-    { f: D4, d: 0.5 }, { f: C4, d: 1.5 }, { f: R, d: 0.5 },
-    // Let's do the Time Warp again
-    { f: A4, d: 1.0 }, { f: G4, d: 0.5 }, { f: E4, d: 0.5 }, { f: D4, d: 0.5 },
-    { f: C4, d: 0.5 }, { f: A3, d: 2.0 }, { f: R, d: 1.0 },
-    // Let's do the Time Warp again
-    { f: A4, d: 1.0 }, { f: G4, d: 0.5 }, { f: E4, d: 0.5 }, { f: D4, d: 0.5 },
-    { f: C4, d: 0.5 }, { f: A3, d: 2.0 }, { f: R, d: 2.0 }
-];
-
-let tempo = 100; // slower BPM for spooky feel
-let beatDur = 60 / tempo;
-let nextNoteTime = 0;
-let noteIndex = 0;
-let sequencerInterval = null;
-
-function playSpookyNote(freq, startTime, duration) {
-    if (!audioCtx || isMuted || audioCtx.state !== 'running') return;
-    
-    // Spooky triangle sound
-    const osc = audioCtx.createOscillator();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(freq, startTime);
-    
-    // Add detune for chorus effect
-    const osc2 = audioCtx.createOscillator();
-    osc2.type = 'sawtooth';
-    osc2.frequency.setValueAtTime(freq * 0.995, startTime);
-    
-    const noteGain = audioCtx.createGain();
-    noteGain.gain.setValueAtTime(0, startTime);
-    noteGain.gain.linearRampToValueAtTime(0.05, startTime + 0.05); // soft spooky attack
-    noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration + 0.4); // slightly longer release
-    
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(450, startTime); // warm, dark spooky tone
-    
-    // Delay effect
-    const delay = audioCtx.createDelay();
-    delay.delayTime.setValueAtTime(0.25, startTime);
-    const delayGain = audioCtx.createGain();
-    delayGain.gain.setValueAtTime(0.2, startTime);
-    
-    // Connections
-    osc.connect(filter);
-    osc2.connect(filter);
-    
-    // Feed filter into noteGain and also into delay
-    filter.connect(noteGain);
-    filter.connect(delay);
-    delay.connect(delayGain);
-    delayGain.connect(noteGain); // feedback
-    
-    noteGain.connect(masterGain);
-    
-    osc.start(startTime);
-    osc.stop(startTime + duration + 0.5);
-    osc2.start(startTime);
-    osc2.stop(startTime + duration + 0.5);
-}
-
-function scheduleNotes() {
-    if (!audioCtx || audioCtx.state !== 'running' || isMuted) return;
-    
-    while (nextNoteTime < audioCtx.currentTime + 0.1) {
-        const item = timeWarpMelody[noteIndex];
-        if (item.f !== R) {
-            playSpookyNote(item.f, nextNoteTime, item.d * beatDur);
-        }
-        nextNoteTime += item.d * beatDur;
-        noteIndex = (noteIndex + 1) % timeWarpMelody.length;
-    }
 }
 
 function updateMuteState() {
     const soundBtn = document.getElementById('sound-toggle');
     if (isMuted) {
-        masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+        if (spookyAudio) {
+            spookyAudio.muted = true;
+        }
         soundBtn.innerHTML = '🔇';
         soundBtn.setAttribute('aria-label', 'Ton einschalten');
     } else {
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
+        initSynth();
+        if (spookyAudio) {
+            spookyAudio.muted = false;
+            try {
+                spookyAudio.play().catch(e => console.log("Audio play blocked by browser:", e));
+            } catch(err) {}
         }
-        // Reset next note time so it doesn't try to catch up with past notes
-        nextNoteTime = audioCtx.currentTime;
-        masterGain.gain.linearRampToValueAtTime(1.0, audioCtx.currentTime + 0.5);
         soundBtn.innerHTML = '🔊';
         soundBtn.setAttribute('aria-label', 'Ton ausschalten');
     }
