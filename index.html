@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einladung zum 70. Geburtstag - Halloween Themenparty</title>
+    <meta name="description" content="Digitale Einladungskarte zum 70. Geburtstag - Eine schaurig-schöne Halloween Themenparty!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Beautiful, fitting fonts: Creepster for spooky titles, Fredericka the Great for watercolor hand-drawn style, and Montserrat for readability -->
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fredericka+the+Great&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Spooky Background Elements -->
+        <div class="mist"></div>
+        <div class="glow-orb orange"></div>
+        <div class="glow-orb purple"></div>
+
+        <!-- Mute/Sound Toggle -->
+        <button id="sound-toggle" class="sound-btn" aria-label="Ton einschalten">
+            <span class="icon">🔇</span>
+        </button>
+
+        <header class="main-header">
+            <h1 class="spooky-title">Eine schaurige Einladung...</h1>
+            <p class="subtitle">Klicke auf die Karte, um das Geheimnis zu lüften</p>
+        </header>
+
+        <!-- Card Section -->
+        <div class="card-perspective">
+            <div id="halloween-card" class="card-container">
+                <!-- Folding Cover -->
+                <div class="card-cover">
+                    <!-- Outer Front Side -->
+                    <div class="face front">
+                        <img src="assets/front.jpg" alt="Halloween Einladungskarte Vorderseite" class="cover-image">
+                        <div class="cover-title-container">
+                            <span class="cover-title">Du bist eingeladen!</span>
+                        </div>
+                        <div class="open-prompt">
+                            <span class="hand-icon">🕷️</span> Tippen, wenn du dich traust
+                        </div>
+                    </div>
+                    <!-- Inside Left Side -->
+                    <div class="face back">
+                        <div class="watercolor-bg left-inside-bg"></div>
+                        <div class="inner-content">
+                            <h2 class="section-title gothic">Die Feier</h2>
+                            <p class="spooky-lead">Kaum zu glauben, aber wahr:<br><strong class="highlight">Carmen wird 70 Jahr!</strong></p>
+                            <p class="invitation-text">
+                                Doch statt Kaffeekränzchen und Tortenduft,<br>
+                                liegt heuer Spuk und Grusel in der Luft!
+                            </p>
+                            <div class="decoration-element witch-hat"></div>
+                            
+                            <div class="menu-box">
+                                <h3 class="box-title">Magisches Menü</h3>
+                                <ul class="menu-list">
+                                    <li>🎃 Kürbissuppe mit Spinnennetz-Rahm</li>
+                                    <li>🧛 Vampir-Häppchen & Fledermaus-Flügel</li>
+                                    <li>🧙 Hexenkessel-Eintopf</li>
+                                    <li>👻 Süßes oder Saures Dessert-Buffet</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Static Back Side (Inside Right) -->
+                <div class="card-back">
+                    <div class="watercolor-bg right-inside-bg"></div>
+                    <div class="inner-content">
+                        <h2 class="section-title gothic">Ablauf des Abends</h2>
+                        
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <span class="time">18:00 Uhr</span>
+                                <span class="event">Pforten der Finsternis öffnen sich (Einlass)</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="time">19:00 Uhr</span>
+                                <span class="event">Eröffnung des Hexenbuffets (Abendessen)</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="time">21:00 Uhr</span>
+                                <span class="event">Tanz der Vampire & Grusel-Spiele</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="time">Mitternacht</span>
+                                <span class="event">Geisterstunde & Mitternachts-Snack</span>
+                            </div>
+                        </div>
+
+                        <div class="footer-note">
+                            <p>Erscheinen in schaurig-schöner Kleidung erwünscht!</p>
+                            <p class="rsvp">Bitte gib uns bis zum 15. Oktober Bescheid.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay Canvas for Bats and Spiderwebs -->
+        <canvas id="animation-canvas"></canvas>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

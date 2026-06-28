@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>QUnit Test Runner - Halloween Einladungskarte</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.20.0.css">
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+        <!-- Mock the card structure for testing functions -->
+        <div id="halloween-card" class="card-container" style="width: 300px; height: 500px;">
+            <div class="card-cover"></div>
+            <button id="sound-toggle"></button>
+        </div>
+        <canvas id="animation-canvas"></canvas>
+    </div>
+
+    <!-- Load QUnit -->
+    <script src="https://code.jquery.com/qunit/qunit-2.20.0.js"></script>
+    
+    <!-- Load App Logic (We'll mock some parts or load it after setting environment) -->
+    <script>
+        // Stub/mock global API requirements to load app.js safely in a test environment
+        window.isTestEnvironment = true;
+    </script>
+    <script src="../app.js"></script>
+    
+    <!-- Load Tests -->
+    <script src="tests.js"></script>
+</body>
+</html>
