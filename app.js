@@ -336,11 +336,11 @@ function toggleCard(event) {
             }
         }
 
-        // Mobile Phase 2: after fly-away transition completes, slide inner-right page in below
+        // Mobile Phase 2: slide inner-right page in below sooner while cover is flying
         if (window.innerWidth <= 600) {
             setTimeout(() => {
                 if (perspective) perspective.classList.add('card-pages-visible');
-            }, 3700);
+            }, 1200);
         }
     } else {
         if (card) card.classList.remove('open');
