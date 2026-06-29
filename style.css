@@ -737,34 +737,7 @@ body {
     opacity: 0.85;
 }
 
-/* 4. Swaying Pumpkin (Middle) & Tilting Pumpkins (Right) */
-@keyframes swayPumpkin {
-    0%, 100% {
-        transform: rotate(-6deg);
-    }
-    50% {
-        transform: rotate(6deg);
-    }
-}
-@keyframes glowEyes {
-    0%, 100% {
-        opacity: 0.55 !important;
-        fill: #ffaa00 !important;
-    }
-    50% {
-        opacity: 0.95 !important;
-        fill: #fff066 !important;
-    }
-}
-.animated-pumpkin {
-    animation: swayPumpkin 4s ease-in-out infinite;
-    transform-box: fill-box;
-    transform-origin: 55px 85px; /* center bottom of pumpkin body */
-}
-
-.pumpkin-eye-glow {
-    animation: glowEyes 2.5s ease-in-out infinite alternate;
-}
+/* The pumpkin animation has been migrated to native SVG <animate> tags for cross-browser compatibility */
 
 .card-back:hover .animated-pumpkins-right {
     transform: rotate(5deg);

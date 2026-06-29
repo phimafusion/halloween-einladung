@@ -94,9 +94,8 @@
 
                             <!-- Center-mid: Friendly glowing pumpkin (placed in the middle space below the joke) -->
                             <g transform="translate(135, 295) scale(0.70)" opacity="0.75">
-                                <g class="animated-pumpkin">
-                                    <!-- Invisible bounding rect to force cross-browser transform-box calculation -->
-                                    <rect x="10" y="0" width="90" height="90" fill="none" pointer-events="none" />
+                                <g>
+                                    <animateTransform attributeName="transform" type="rotate" values="-6 55 85; 6 55 85; -6 55 85" dur="4s" repeatCount="indefinite" />
                                     <!-- Back shadow/glow -->
                                     <ellipse cx="55" cy="55" rx="28" ry="30" fill="#e8821a" opacity="0.45" filter="url(#blur1)" />
                                     <!-- Stem -->
@@ -107,16 +106,36 @@
                                     <ellipse cx="45" cy="55" rx="20" ry="28" fill="#e65c00" />
                                     <ellipse cx="65" cy="55" rx="20" ry="28" fill="#e65c00" />
                                     <ellipse cx="55" cy="55" rx="22" ry="30" fill="#ff7518" />
-                                    <!-- Friendly Glowing Eyes -->
-                                    <ellipse cx="43" cy="45" rx="6" ry="7" class="pumpkin-eye-glow" fill="#fff066" filter="url(#blur1)" opacity="0.8" />
-                                    <ellipse cx="43" cy="45" rx="4" ry="5" class="pumpkin-eye" fill="#ffcc00" />
-                                    <ellipse cx="67" cy="45" rx="6" ry="7" class="pumpkin-eye-glow" fill="#fff066" filter="url(#blur1)" opacity="0.8" />
-                                    <ellipse cx="67" cy="45" rx="4" ry="5" class="pumpkin-eye" fill="#ffcc00" />
+                                    
+                                    <!-- Friendly Glowing Eyes (Native SVG Animation) -->
+                                    <ellipse cx="43" cy="45" rx="6" ry="7" filter="url(#blur1)">
+                                        <animate attributeName="fill" values="#ffaa00; #fff066; #ffaa00" dur="2.5s" repeatCount="indefinite" />
+                                        <animate attributeName="opacity" values="0.55; 0.95; 0.55" dur="2.5s" repeatCount="indefinite" />
+                                    </ellipse>
+                                    <ellipse cx="43" cy="45" rx="4" ry="5">
+                                        <animate attributeName="fill" values="#e68a00; #ffcc00; #e68a00" dur="2.5s" repeatCount="indefinite" />
+                                    </ellipse>
+                                    
+                                    <ellipse cx="67" cy="45" rx="6" ry="7" filter="url(#blur1)">
+                                        <animate attributeName="fill" values="#ffaa00; #fff066; #ffaa00" dur="2.5s" repeatCount="indefinite" />
+                                        <animate attributeName="opacity" values="0.55; 0.95; 0.55" dur="2.5s" repeatCount="indefinite" />
+                                    </ellipse>
+                                    <ellipse cx="67" cy="45" rx="4" ry="5">
+                                        <animate attributeName="fill" values="#e68a00; #ffcc00; #e68a00" dur="2.5s" repeatCount="indefinite" />
+                                    </ellipse>
+                                    
                                     <!-- Friendly Spooky Nose -->
                                     <polygon points="55,50 51,55 59,55" fill="#ffcc00" />
+                                    
                                     <!-- Friendly Happy Glowing Smile -->
-                                    <path d="M38 58 Q55 75 72 58 Q55 65 38 58" class="pumpkin-eye-glow" fill="#fff066" filter="url(#blur1)" opacity="0.8" />
-                                    <path d="M38 58 Q55 75 72 58 Q55 65 38 58" class="pumpkin-eye" fill="#ffcc00" />
+                                    <path d="M38 58 Q55 75 72 58 Q55 65 38 58" filter="url(#blur1)">
+                                        <animate attributeName="fill" values="#ffaa00; #fff066; #ffaa00" dur="2.5s" repeatCount="indefinite" />
+                                        <animate attributeName="opacity" values="0.55; 0.95; 0.55" dur="2.5s" repeatCount="indefinite" />
+                                    </path>
+                                    <path d="M38 58 Q55 75 72 58 Q55 65 38 58">
+                                        <animate attributeName="fill" values="#e68a00; #ffcc00; #e68a00" dur="2.5s" repeatCount="indefinite" />
+                                    </path>
+                                    
                                     <!-- Cute little vampire teeth in the smile -->
                                     <polygon points="44,59 47,63 49,60" fill="#ffffff" />
                                     <polygon points="66,59 63,63 61,60" fill="#ffffff" />
