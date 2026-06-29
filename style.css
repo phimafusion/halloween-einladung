@@ -748,8 +748,7 @@ body {
 }
 .animated-pumpkin {
     animation: dancePumpkin 3.2s ease-in-out infinite;
-    transform-box: fill-box; /* Force relative transform origin on SVGs */
-    transform-origin: center bottom; /* center bottom of pumpkin body */
+    transform-origin: 55px 85px; /* center bottom of pumpkin body */
 }
 
 .card-back:hover .animated-pumpkins-right {
