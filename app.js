@@ -308,6 +308,7 @@ function toggleCard(event) {
     }
 
     cardOpen = !cardOpen;
+    document.body.classList.toggle('card-is-open', cardOpen);
 
     const card = getCardElement();
     const perspective = card ? card.closest('.card-perspective') : null;
