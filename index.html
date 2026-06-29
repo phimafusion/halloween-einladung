@@ -92,24 +92,33 @@
                                 </g>
                             </g>
 
-                            <!-- Mid-left: Small pumpkin (moved up from bottom) -->
-                            <g transform="translate(4, 230) scale(0.60)" opacity="0.55">
+                            <!-- Mid-left: Scary Jack-o'-lantern pumpkin -->
+                            <g transform="translate(4, 230) scale(0.60)" opacity="0.65">
                                 <g class="animated-pumpkin">
-                                    <ellipse cx="55" cy="55" rx="28" ry="30" fill="#e8821a" opacity="0.5"
-                                        filter="url(#blur1)" />
-                                    <!-- Pumpkin segments -->
-                                    <path d="M30 55 Q34 30 55 28 Q76 30 80 55 Q76 80 55 82 Q34 80 30 55 Z" fill="#e07a10"
-                                        opacity="0.8" />
-                                    <path d="M40 55 Q43 32 55 30 Q67 32 70 55 Q67 78 55 80 Q43 78 40 55 Z" fill="#f08c20"
-                                        opacity="0.6" />
-                                    <!-- Eyes -->
-                                    <path d="M42 50 L46 45 L50 50 Z" fill="#1c0a04" opacity="0.85" />
-                                    <path d="M60 50 L64 45 L68 50 Z" fill="#1c0a04" opacity="0.85" />
-                                    <!-- Mouth -->
-                                    <path d="M43 60 Q55 68 67 60" stroke="#1c0a04" stroke-width="2.5" fill="none"
-                                        stroke-linecap="round" opacity="0.8" />
+                                    <!-- Back shadow/glow -->
+                                    <ellipse cx="55" cy="55" rx="28" ry="30" fill="#e8821a" opacity="0.4" filter="url(#blur1)" />
                                     <!-- Stem -->
-                                    <path d="M53 28 Q50 16 56 12 Q60 20 57 28" fill="#5a3010" opacity="0.7" />
+                                    <path d="M53 28 Q48 12 56 8 Q60 16 57 28" fill="#4a5d23" />
+                                    <!-- Pumpkin segments for 3D look -->
+                                    <ellipse cx="36" cy="55" rx="16" ry="26" fill="#cc5200" />
+                                    <ellipse cx="74" cy="55" rx="16" ry="26" fill="#cc5200" />
+                                    <ellipse cx="45" cy="55" rx="20" ry="28" fill="#e65c00" />
+                                    <ellipse cx="65" cy="55" rx="20" ry="28" fill="#e65c00" />
+                                    <ellipse cx="55" cy="55" rx="22" ry="30" fill="#ff7518" />
+                                    <!-- Evil Eyes (Glowing Yellow/Red) -->
+                                    <path d="M38 42 L48 48 L46 52 Z" fill="#fff066" filter="url(#blur1)" opacity="0.8" />
+                                    <path d="M38 42 L48 48 L46 52 Z" fill="#ffcc00" />
+                                    <path d="M72 42 L62 48 L64 52 Z" fill="#fff066" filter="url(#blur1)" opacity="0.8" />
+                                    <path d="M72 42 L62 48 L64 52 Z" fill="#ffcc00" />
+                                    <!-- Spooky Nose -->
+                                    <polygon points="55,50 51,55 59,55" fill="#ffcc00" />
+                                    <!-- Jagged Evil Smile (Glowing interior) -->
+                                    <!-- Glowing background for mouth -->
+                                    <path d="M34 60 Q55 74 76 60 Q66 68 55 68 Q44 68 34 60" fill="#fff066" filter="url(#blur1)" opacity="0.8" />
+                                    <!-- Main jagged mouth path -->
+                                    <path d="M34 60 L42 63 L45 61 L50 65 L55 60 L60 65 L65 61 L68 63 L76 60 Q66 74 55 74 Q44 74 34 60 Z" fill="#1c0a04" />
+                                    <!-- Glowing teeth highlights -->
+                                    <path d="M38 61 L42 63 L45 61 L47 64 L50 65 L53 62 L55 60 L57 62 L60 65 L63 64 L65 61 L68 63 L72 61" stroke="#ffcc00" stroke-width="1.2" fill="none" />
                                 </g>
                             </g>
 
