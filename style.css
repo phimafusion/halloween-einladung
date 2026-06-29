@@ -748,16 +748,17 @@ body {
 }
 @keyframes glowEyes {
     0%, 100% {
-        opacity: 0.55;
-        fill: #ffaa00;
+        opacity: 0.55 !important;
+        fill: #ffaa00 !important;
     }
     50% {
-        opacity: 0.95;
-        fill: #fff066;
+        opacity: 0.95 !important;
+        fill: #fff066 !important;
     }
 }
 .animated-pumpkin {
     animation: swayPumpkin 4s ease-in-out infinite;
+    transform-box: fill-box;
     transform-origin: 55px 85px; /* center bottom of pumpkin body */
 }
 

@@ -95,6 +95,8 @@
                             <!-- Center-mid: Friendly glowing pumpkin (placed in the middle space below the joke) -->
                             <g transform="translate(135, 295) scale(0.70)" opacity="0.75">
                                 <g class="animated-pumpkin">
+                                    <!-- Invisible bounding rect to force cross-browser transform-box calculation -->
+                                    <rect x="10" y="0" width="90" height="90" fill="none" pointer-events="none" />
                                     <!-- Back shadow/glow -->
                                     <ellipse cx="55" cy="55" rx="28" ry="30" fill="#e8821a" opacity="0.45" filter="url(#blur1)" />
                                     <!-- Stem -->
