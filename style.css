@@ -723,16 +723,6 @@ body {
     }
 }
 
-.animated-spider {
-    animation: crawlSpider 7.5s ease-in-out infinite;
-    transform-origin: 0 0;
-}
-
-.spider-thread {
-    transform-origin: 60px 60px; /* Aligned with center of the web */
-    animation: stretchThread 7.5s ease-in-out infinite;
-}
-
 /* 4. Spooky Joke Styling */
 .spooky-joke {
     text-align: center;
@@ -758,7 +748,8 @@ body {
 }
 .animated-pumpkin {
     animation: dancePumpkin 3.2s ease-in-out infinite;
-    transform-origin: 55px 85px; /* center bottom of pumpkin body */
+    transform-box: fill-box; /* Force relative transform origin on SVGs */
+    transform-origin: center bottom; /* center bottom of pumpkin body */
 }
 
 .card-back:hover .animated-pumpkins-right {
