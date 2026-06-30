@@ -112,16 +112,20 @@ function setSoundBtnIcon() {
 }
 
 // ── 2. EVIL LAUGH (MP3) ──────────────────────────────────────────────────
+let currentLaughAudio = null;
+
 function playEvilLaugh(onEnded) {
     try {
-        const laugh = new Audio('assets/evil_laugh.mp3');
-        laugh.volume = isMuted ? 0 : 0.7;
-        laugh.play().catch(e => console.log('Laugh play blocked:', e));
-        laugh.addEventListener('ended', () => {
+        currentLaughAudio = new Audio('assets/evil_laugh.mp3');
+        currentLaughAudio.volume = isMuted ? 0 : 0.7;
+        currentLaughAudio.play().catch(e => console.log('Laugh play blocked:', e));
+        currentLaughAudio.addEventListener('ended', () => {
+            currentLaughAudio = null;
             if (typeof onEnded === 'function') onEnded();
         });
         // Fallback: if ended event never fires within 10s, call onEnded anyway
         setTimeout(() => {
+            currentLaughAudio = null;
             if (typeof onEnded === 'function') onEnded();
         }, 10000);
     } catch(e) {
@@ -432,6 +436,7 @@ if (canvas) {
 function handleVisibility() {
     if (document.hidden || document.visibilityState === 'hidden') {
         if (spookyAudio) spookyAudio.pause();
+        if (typeof currentLaughAudio !== 'undefined' && currentLaughAudio) currentLaughAudio.pause();
     } else {
         if (cardOpen && !isMuted && spookyAudio) {
             spookyAudio.play().catch(e => console.log('Music resume blocked:', e));
@@ -442,13 +447,8 @@ function handleVisibility() {
 document.addEventListener("visibilitychange", handleVisibility);
 
 // Catch mobile app switcher and tab changes faster
-window.addEventListener("blur", () => {
-    if (spookyAudio) spookyAudio.pause();
-});
-
-window.addEventListener("pagehide", () => {
-    if (spookyAudio) spookyAudio.pause();
-});
+window.addEventListener("blur", handleVisibility);
+window.addEventListener("pagehide", handleVisibility);
 
 window.addEventListener("focus", () => {
     // Only resume if we are actually visible
@@ -458,4 +458,17 @@ window.addEventListener("focus", () => {
         }
     }
 });
+
+// Watchdog: Some browsers (like Firefox on Android) occasionally fail to fire visibility events reliably 
+// or delay them. This active loop ensures the audio is killed if the document becomes hidden.
+setInterval(() => {
+    if (document.hidden || document.visibilityState === 'hidden') {
+        if (spookyAudio && !spookyAudio.paused) {
+            spookyAudio.pause();
+        }
+        if (typeof currentLaughAudio !== 'undefined' && currentLaughAudio && !currentLaughAudio.paused) {
+            currentLaughAudio.pause();
+        }
+    }
+}, 500);
 
