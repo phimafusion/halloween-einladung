@@ -49,28 +49,13 @@ QUnit.module('Halloween Invitation Card Tests', function(hooks) {
         }
     });
 
-    QUnit.test('Spiderweb Generation & Snapping State', function(assert) {
-        assert.strictEqual(window.cardApp.animationEngine.webStrands.length, 12, 'Should initialize exactly 12 web strands');
+    QUnit.test('Spiderweb Generation', function(assert) {
+        assert.strictEqual(window.cardApp.animationEngine.webStrands.length, 16, 'Should initialize exactly 16 dangling web strands (8 per side)');
         
         // Verify web strand structure
         const strand = window.cardApp.animationEngine.webStrands[0];
-        assert.ok(strand.relY >= 0.08 && strand.relY <= 0.95, 'Strand relY should be within expected vertical distribution');
-        assert.strictEqual(strand.snapped, false, 'Strands should start unsnapped');
-
-        // Test update coords & snap detection
-        const creaseX = 200;
-        const cardTop = 50;
-        const cardHeight = 400;
-        const cardW = 300;
-        
-        // Update at angle = 0
-        let coords = strand.update(creaseX, cardTop, cardHeight, 0, cardW);
-        assert.ok(coords.xLeft > creaseX, 'At 0 degrees, left attach point is right of crease');
-        assert.strictEqual(strand.snapped, false, 'Strand must not snap at 0 degrees');
-
-        // Update at opening angle > 1.25 rad (e.g. 1.5 rad)
-        strand.update(creaseX, cardTop, cardHeight, 1.5, cardW);
-        assert.strictEqual(strand.snapped, true, 'Strand should snap when opening angle exceeds 1.25 radians');
+        assert.ok(strand.relX >= 0.0 && strand.relX <= 1.0, 'Strand relX should be valid percentage');
+        assert.ok(strand.length >= 80, 'Strand should have a minimum length');
     });
 
     QUnit.test('Bat Spawning and Particle Animation Physics', function(assert) {

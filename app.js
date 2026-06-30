@@ -159,68 +159,28 @@ class Bat {
 }
 
 class WebStrand {
-    constructor(relY, originalDist) {
-        this.relY = relY; 
-        this.originalDist = originalDist;
-        this.snapped = false;
-        this.snapProgress = 0;
-        this.slack = 10 + Math.random() * 15;
-        this.opacity = 0.7 + Math.random() * 0.3;
+    constructor(relX) {
+        this.relX = relX;
+        this.length = 80 + Math.random() * 200;
+        this.phase = Math.random() * Math.PI * 2;
+        this.speed = 0.005 + Math.random() * 0.015;
+        this.sway = 10 + Math.random() * 20;
+        this.opacity = 0.15 + Math.random() * 0.25;
     }
 
-    update(creaseX, cardTop, cardHeight, coverAngle, cardW) {
-        const y = cardTop + cardHeight * this.relY;
-        const attachDist = cardW * 0.15; 
-        const xLeft = creaseX + attachDist * Math.cos(coverAngle);
-        const xRight = creaseX + attachDist;
+    draw(ctx, canvasWidth) {
+        this.phase += this.speed;
+        const x = this.relX * canvasWidth;
+        const currentSway = Math.sin(this.phase) * this.sway;
         
-        if (coverAngle > 1.25 && !this.snapped) {
-            this.snapped = true;
-        }
-
-        if (this.snapped) {
-            this.snapProgress += 0.05;
-        }
-
-        return { xLeft, xRight, y };
-    }
-
-    draw(xLeft, xRight, y, ctx) {
-        ctx.strokeStyle = this.snapped
-            ? `rgba(210, 180, 140, ${this.opacity * (1 - this.snapProgress)})`
-            : `rgba(235, 215, 180, ${this.opacity})`;
-        ctx.lineWidth = this.snapped ? Math.max(0.3, 2.2 * (1 - this.snapProgress)) : 2.2;
-        ctx.lineCap = 'round';
-        ctx.shadowColor = 'rgba(255, 180, 80, 0.35)';
-        ctx.shadowBlur = 4;
+        ctx.strokeStyle = `rgba(235, 215, 180, ${this.opacity})`;
+        ctx.lineWidth = 0.8; // Sehr feine Fäden
         ctx.beginPath();
-
-        if (!this.snapped) {
-            const midX = (xLeft + xRight) / 2;
-            const midY = y + this.slack;
-            ctx.moveTo(xLeft, y);
-            ctx.quadraticCurveTo(midX, midY, xRight, y);
-            ctx.stroke();
-        } else {
-            if (this.snapProgress < 1) {
-                const midX = (xLeft + xRight) / 2;
-                const snapX = midX;
-                const snapY = y + this.slack;
-
-                const leftEndX  = xLeft  + (snapX - xLeft)  * (1 - this.snapProgress);
-                const leftEndY  = y      + (snapY - y)       * (1 - this.snapProgress);
-                ctx.moveTo(xLeft, y);
-                ctx.quadraticCurveTo((xLeft + leftEndX) / 2, y + this.slack / 2, leftEndX, leftEndY);
-
-                const rightEndX = xRight - (xRight - snapX) * (1 - this.snapProgress);
-                const rightEndY = y      + (snapY - y)       * (1 - this.snapProgress);
-                ctx.moveTo(xRight, y);
-                ctx.quadraticCurveTo((xRight + rightEndX) / 2, y + this.slack / 2, rightEndX, rightEndY);
-
-                ctx.stroke();
-            }
-        }
-        ctx.shadowBlur = 0;
+        ctx.moveTo(x, 0);
+        
+        // Zeichnet einen leicht geschwungenen, hängenden Faden
+        ctx.quadraticCurveTo(x + currentSway * 0.5, this.length * 0.5, x + currentSway, this.length);
+        ctx.stroke();
     }
 }
 
@@ -252,9 +212,13 @@ class AnimationEngine {
 
     initWebStrands() {
         this.webStrands = [];
-        for (let i = 0; i < 12; i++) {
-            const relY = 0.08 + (i * 0.075) + Math.random() * 0.03;
-            this.webStrands.push(new WebStrand(relY, 40));
+        // Fäden auf der linken Seite (0% bis 15% der Bildschirmbreite)
+        for (let i = 0; i < 8; i++) {
+            this.webStrands.push(new WebStrand(Math.random() * 0.15));
+        }
+        // Fäden auf der rechten Seite (85% bis 100% der Bildschirmbreite)
+        for (let i = 0; i < 8; i++) {
+            this.webStrands.push(new WebStrand(0.85 + Math.random() * 0.15));
         }
     }
 
@@ -271,18 +235,10 @@ class AnimationEngine {
         
         this.openingAngle += (this.targetAngle - this.openingAngle) * 0.08;
         
-        const rect = this.cardElement ? this.cardElement.getBoundingClientRect() : { left: 0, top: 0, height: 0, width: 300 };
-        const creaseX = rect.left;
-        const cardTop = rect.top;
-        const cardHeight = rect.height;
-        const cardW = this.cardElement ? this.cardElement.offsetWidth : 300;
-        
-        if (this.openingAngle > 0.01) {
-            this.webStrands.forEach(strand => {
-                const pts = strand.update(creaseX, cardTop, cardHeight, this.openingAngle, cardW);
-                strand.draw(pts.xLeft, pts.xRight, pts.y, this.ctx);
-            });
-        }
+        // Zeichne die hängenden Fäden dauerhaft im Hintergrund
+        this.webStrands.forEach(strand => {
+            strand.draw(this.ctx, this.canvas.width);
+        });
         
         for (let i = this.bats.length - 1; i >= 0; i--) {
             const bat = this.bats[i];
