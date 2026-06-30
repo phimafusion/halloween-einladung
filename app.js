@@ -128,8 +128,7 @@ function drawBatPath(c, x, y, width, height, flapFactor) {
 }
 
 class Bat {
-    constructor(startX, startY, ctx) {
-        this.ctx = ctx;
+    constructor(startX, startY) {
         this.x = startX;
         this.y = startY;
         this.width = 24 + Math.random() * 40;
@@ -151,17 +150,16 @@ class Bat {
         if (this.scale > 0.1) this.scale -= 0.001;
     }
 
-    draw() {
+    draw(ctx) {
         const currentFlap = Math.sin(this.flapPhase);
-        this.ctx.globalAlpha = Math.max(0, this.opacity);
-        drawBatPath(this.ctx, this.x, this.y, this.width * this.scale, this.height * this.scale, currentFlap);
-        this.ctx.globalAlpha = 1;
+        ctx.globalAlpha = Math.max(0, this.opacity);
+        drawBatPath(ctx, this.x, this.y, this.width * this.scale, this.height * this.scale, currentFlap);
+        ctx.globalAlpha = 1;
     }
 }
 
 class WebStrand {
-    constructor(relY, originalDist, ctx) {
-        this.ctx = ctx;
+    constructor(relY, originalDist) {
         this.relY = relY; 
         this.originalDist = originalDist;
         this.snapped = false;
@@ -187,22 +185,22 @@ class WebStrand {
         return { xLeft, xRight, y };
     }
 
-    draw(xLeft, xRight, y) {
-        this.ctx.strokeStyle = this.snapped
+    draw(xLeft, xRight, y, ctx) {
+        ctx.strokeStyle = this.snapped
             ? `rgba(210, 180, 140, ${this.opacity * (1 - this.snapProgress)})`
             : `rgba(235, 215, 180, ${this.opacity})`;
-        this.ctx.lineWidth = this.snapped ? Math.max(0.3, 2.2 * (1 - this.snapProgress)) : 2.2;
-        this.ctx.lineCap = 'round';
-        this.ctx.shadowColor = 'rgba(255, 180, 80, 0.35)';
-        this.ctx.shadowBlur = 4;
-        this.ctx.beginPath();
+        ctx.lineWidth = this.snapped ? Math.max(0.3, 2.2 * (1 - this.snapProgress)) : 2.2;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(255, 180, 80, 0.35)';
+        ctx.shadowBlur = 4;
+        ctx.beginPath();
 
         if (!this.snapped) {
             const midX = (xLeft + xRight) / 2;
             const midY = y + this.slack;
-            this.ctx.moveTo(xLeft, y);
-            this.ctx.quadraticCurveTo(midX, midY, xRight, y);
-            this.ctx.stroke();
+            ctx.moveTo(xLeft, y);
+            ctx.quadraticCurveTo(midX, midY, xRight, y);
+            ctx.stroke();
         } else {
             if (this.snapProgress < 1) {
                 const midX = (xLeft + xRight) / 2;
@@ -211,31 +209,28 @@ class WebStrand {
 
                 const leftEndX  = xLeft  + (snapX - xLeft)  * (1 - this.snapProgress);
                 const leftEndY  = y      + (snapY - y)       * (1 - this.snapProgress);
-                this.ctx.moveTo(xLeft, y);
-                this.ctx.quadraticCurveTo((xLeft + leftEndX) / 2, y + this.slack / 2, leftEndX, leftEndY);
+                ctx.moveTo(xLeft, y);
+                ctx.quadraticCurveTo((xLeft + leftEndX) / 2, y + this.slack / 2, leftEndX, leftEndY);
 
                 const rightEndX = xRight - (xRight - snapX) * (1 - this.snapProgress);
                 const rightEndY = y      + (snapY - y)       * (1 - this.snapProgress);
-                this.ctx.moveTo(xRight, y);
-                this.ctx.quadraticCurveTo((xRight + rightEndX) / 2, y + this.slack / 2, rightEndX, rightEndY);
+                ctx.moveTo(xRight, y);
+                ctx.quadraticCurveTo((xRight + rightEndX) / 2, y + this.slack / 2, rightEndX, rightEndY);
 
-                this.ctx.stroke();
+                ctx.stroke();
             }
         }
-        this.ctx.shadowBlur = 0;
+        ctx.shadowBlur = 0;
     }
 }
 
 class AnimationEngine {
     constructor() {
-        this.canvas = document.getElementById('animation-canvas');
-        this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
         this.bats = [];
         this.webStrands = [];
         this.openingAngle = 0;
         this.targetAngle = 0;
         this.MAX_BATS = 25;
-        this.cardElement = document.getElementById('halloween-card');
         
         if (this.canvas) {
             this.resizeCanvas();
@@ -244,6 +239,10 @@ class AnimationEngine {
             requestAnimationFrame(() => this.animate());
         }
     }
+
+    get canvas() { return document.getElementById('animation-canvas'); }
+    get ctx() { return this.canvas ? this.canvas.getContext('2d') : null; }
+    get cardElement() { return document.getElementById('halloween-card'); }
 
     resizeCanvas() {
         if (!this.canvas) return;
@@ -255,13 +254,13 @@ class AnimationEngine {
         this.webStrands = [];
         for (let i = 0; i < 12; i++) {
             const relY = 0.08 + (i * 0.075) + Math.random() * 0.03;
-            this.webStrands.push(new WebStrand(relY, 40, this.ctx));
+            this.webStrands.push(new WebStrand(relY, 40));
         }
     }
 
     spawnBats(x, y) {
         for (let i = 0; i < this.MAX_BATS; i++) {
-            this.bats.push(new Bat(x, y + (Math.random() - 0.5) * 100, this.ctx));
+            this.bats.push(new Bat(x, y + (Math.random() - 0.5) * 100));
         }
     }
 
@@ -281,14 +280,14 @@ class AnimationEngine {
         if (this.openingAngle > 0.01) {
             this.webStrands.forEach(strand => {
                 const pts = strand.update(creaseX, cardTop, cardHeight, this.openingAngle, cardW);
-                strand.draw(pts.xLeft, pts.xRight, pts.y);
+                strand.draw(pts.xLeft, pts.xRight, pts.y, this.ctx);
             });
         }
         
         for (let i = this.bats.length - 1; i >= 0; i--) {
             const bat = this.bats[i];
             bat.update();
-            bat.draw();
+            bat.draw(this.ctx);
             if (bat.opacity <= 0 || bat.y < -50) {
                 this.bats.splice(i, 1);
             }
@@ -302,10 +301,13 @@ class CardController {
         this.animationEngine = animationEngine;
         this.cardOpen = false;
         
-        this.cardElement = document.getElementById('halloween-card');
-        if (this.cardElement) {
-            this.cardElement.addEventListener('click', (e) => this.toggleCard(e));
-        }
+        // Event delegation for the card toggle
+        document.addEventListener('click', (e) => {
+            const card = e.target.closest('#halloween-card');
+            if (card) {
+                this.toggleCard(e);
+            }
+        });
 
         // Setup sound toggle
         document.addEventListener('click', (e) => {
@@ -317,6 +319,10 @@ class CardController {
         });
 
         this.setupVisibilityHandling();
+    }
+
+    get cardElement() {
+        return document.getElementById('halloween-card');
     }
 
     toggleCard(event) {
