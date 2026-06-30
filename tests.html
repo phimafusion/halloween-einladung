@@ -30,16 +30,17 @@
     QUnit.module('Audio & Card Toggling State Tests', function(hooks) {
       
       hooks.beforeEach(function() {
+        if (!window.cardApp) return;
         // Reset states
-        window.cardApp.setCardOpen(false);
-        window.cardApp.setMusicStarted(false);
-        window.cardApp.setIsMuted(false);
+        window.cardApp.cardController.cardOpen = false;
+        window.cardApp.audioManager.musicStarted = false;
+        window.cardApp.audioManager.isMuted = false;
         
-        var sa = window.cardApp.getSpookyAudio();
+        var sa = window.cardApp.audioManager.spookyAudio;
         if (sa && typeof sa.pause === 'function') {
           try { sa.pause(); } catch(e) {}
         }
-        window.cardApp.setSpookyAudio(null);
+        window.cardApp.audioManager.spookyAudio = null;
       });
 
       QUnit.test('Closing card pauses music immediately', function(assert) {
@@ -55,15 +56,16 @@
             pauseCalled = true;
           },
           loop: true,
-          volume: 0.35
+          volume: 0.35,
+          paused: false
         };
 
-        window.cardApp.setSpookyAudio(mockAudio);
-        window.cardApp.setMusicStarted(true);
+        window.cardApp.audioManager.spookyAudio = mockAudio;
+        window.cardApp.audioManager.musicStarted = true;
 
         // 1. Simulate opening the card (CardOpen becomes true)
-        window.cardApp.toggleCard();
-        assert.true(window.cardApp.getCardOpen(), 'Card is now open');
+        window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
+        assert.true(window.cardApp.cardController.cardOpen, 'Card is now open');
         assert.true(playCalled, 'Music play() was called on open');
 
         // Reset tracking variables
@@ -71,8 +73,8 @@
         pauseCalled = false;
 
         // 2. Simulate closing the card (CardOpen becomes false)
-        window.cardApp.toggleCard();
-        assert.false(window.cardApp.getCardOpen(), 'Card is closed');
+        window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
+        assert.false(window.cardApp.cardController.cardOpen, 'Card is closed');
         assert.true(pauseCalled, 'Music pause() was immediately called when card closed');
       });
 
@@ -88,16 +90,16 @@
           volume: 0.35
         };
 
-        window.cardApp.setSpookyAudio(mockAudio);
+        window.cardApp.audioManager.spookyAudio = mockAudio;
         
-        // 1. Open the card
-        window.cardApp.setCardOpen(true);
+        // 1. Open the card manually to simulate state
+        window.cardApp.cardController.cardOpen = true;
 
         // 2. Before music finishes callback/startMusic runs, user closes the card!
-        window.cardApp.setCardOpen(false);
+        window.cardApp.cardController.cardOpen = false;
 
         // 3. Delayed startMusic callback executes
-        window.cardApp.startMusic();
+        window.cardApp.audioManager.startMusic(window.cardApp.cardController.cardOpen);
         
         assert.false(playCalled, 'Music play() was BLOCKED from starting because card is closed');
       });
@@ -109,10 +111,10 @@
           loop: true,
           volume: 0.35
         };
-        window.cardApp.setSpookyAudio(mockAudio);
+        window.cardApp.audioManager.spookyAudio = mockAudio;
 
         // Ensure we start unmuted
-        window.cardApp.setIsMuted(false);
+        window.cardApp.audioManager.isMuted = false;
 
         // Simulate click on mute button (mute becomes true)
         var soundBtn = document.getElementById('sound-toggle');
@@ -134,19 +136,19 @@
         perspective.classList.remove('card-open');
 
         // Open card
-        window.cardApp.toggleCard();
+        window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
         assert.true(card.classList.contains('open'), 'Card container has class "open"');
         assert.true(perspective.classList.contains('card-open'), 'Perspective container has class "card-open"');
 
         // Close card
-        window.cardApp.toggleCard();
+        window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
         assert.false(card.classList.contains('open'), 'Card container lost class "open"');
         assert.false(perspective.classList.contains('card-open'), 'Perspective container lost class "card-open"');
       });
 
       QUnit.test('Subsequent card opens do not trigger laugh again', function(assert) {
         // Set state as if music had already started previously
-        window.cardApp.setMusicStarted(true);
+        window.cardApp.audioManager.musicStarted = true;
 
         var playCalled = false;
         var mockAudio = {
@@ -158,10 +160,10 @@
           loop: true,
           volume: 0.35
         };
-        window.cardApp.setSpookyAudio(mockAudio);
+        window.cardApp.audioManager.spookyAudio = mockAudio;
 
         // Toggle card open
-        window.cardApp.toggleCard();
+        window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
         assert.true(playCalled, 'spookyAudio.play() is resumed directly instead of waiting for laugh');
       });
       
