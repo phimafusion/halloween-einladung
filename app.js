@@ -429,14 +429,33 @@ if (canvas) {
 }
 
 // Pause music when browser is minimized or sent to the background
-document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-        if (spookyAudio) {
-            spookyAudio.pause();
-        }
+function handleVisibility() {
+    if (document.hidden || document.visibilityState === 'hidden') {
+        if (spookyAudio) spookyAudio.pause();
     } else {
         if (cardOpen && !isMuted && spookyAudio) {
             spookyAudio.play().catch(e => console.log('Music resume blocked:', e));
         }
     }
+}
+
+document.addEventListener("visibilitychange", handleVisibility);
+
+// Catch mobile app switcher and tab changes faster
+window.addEventListener("blur", () => {
+    if (spookyAudio) spookyAudio.pause();
 });
+
+window.addEventListener("pagehide", () => {
+    if (spookyAudio) spookyAudio.pause();
+});
+
+window.addEventListener("focus", () => {
+    // Only resume if we are actually visible
+    if (document.visibilityState !== 'hidden' && !document.hidden) {
+        if (cardOpen && !isMuted && spookyAudio) {
+            spookyAudio.play().catch(e => console.log('Music resume blocked:', e));
+        }
+    }
+});
+
