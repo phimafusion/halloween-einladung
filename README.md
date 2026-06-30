@@ -11,7 +11,7 @@ Eine animierte, digitale Einladungskarte für Carmens 70. Geburtstag im schaurig
 - **Responsive 3D-Faltung**: Die Karte öffnet sich bei einem Klick oder Tippen wie ein echtes Buch. Dank CSS 3D-Transforms wirkt dies realistisch, auf dem Handy fliegt das Cover sogar dynamisch nach oben weg, um mehr Platz für den Text zu machen.
 - **HTML5 Canvas Animationen**: 
   - **Fledermäuse**: Beim Öffnen brechen Fledermaus-Partikel aus dem Falz aus, flattern und fliegen physikalisch berechnet in den "Himmel".
-  - **Reißende Spinnenfäden**: Beim Aufklappen dehnen sich Spinnenfäden, die bei einem größeren Öffnungswinkel physikalisch korrekt zerreißen und zurückschnellen.
+  - **Hängende Spinnweben**: Feine, dynamisch berechnete Spinnweben hängen von den Rändern des Bildschirms herab und wiegen sich sanft im Wind.
 - **Gruselige Audio-Kulisse**: Ein "Evil Laugh" erklingt beim ersten Öffnen, gefolgt von einem schaurigen Cover von *"Time Warp"* (Rocky Horror Picture Show).
 - **Intelligente Hintergrund-Pausierung**: Die Karte pausiert die Musik automatisch auf allen Geräten (iOS/Android/Desktop), sobald der Tab gewechselt wird oder die App in den Hintergrund rückt.
 - **Stummschaltung**: Über einen dezenten Audio-Button oben rechts lässt sich die Tonspur jederzeit komplett muten.
