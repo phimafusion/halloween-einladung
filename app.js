@@ -427,3 +427,16 @@ if (canvas) {
     setSoundBtnIcon(); // set to unmuted icon initially
     requestAnimationFrame(animate);
 }
+
+// Pause music when browser is minimized or sent to the background
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        if (spookyAudio) {
+            spookyAudio.pause();
+        }
+    } else {
+        if (cardOpen && !isMuted && spookyAudio) {
+            spookyAudio.play().catch(e => console.log('Music resume blocked:', e));
+        }
+    }
+});
