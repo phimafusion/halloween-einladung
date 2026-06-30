@@ -359,6 +359,9 @@ function toggleCard(event) {
         if (spookyAudio) {
             spookyAudio.pause();
         }
+        if (typeof currentLaughAudio !== 'undefined' && currentLaughAudio) {
+            currentLaughAudio.pause();
+        }
     }
 }
 
@@ -432,43 +435,41 @@ if (canvas) {
     requestAnimationFrame(animate);
 }
 
-// Pause music when browser is minimized or sent to the background
-function handleVisibility() {
-    if (document.hidden || document.visibilityState === 'hidden') {
-        if (spookyAudio) spookyAudio.pause();
-        if (typeof currentLaughAudio !== 'undefined' && currentLaughAudio) currentLaughAudio.pause();
-    } else {
-        if (cardOpen && !isMuted && spookyAudio) {
-            spookyAudio.play().catch(e => console.log('Music resume blocked:', e));
-        }
+// Pause music when browser is minimized, sent to background, or loses focus
+function pauseAllAudio() {
+    if (spookyAudio && !spookyAudio.paused) spookyAudio.pause();
+    if (typeof currentLaughAudio !== 'undefined' && currentLaughAudio && !currentLaughAudio.paused) currentLaughAudio.pause();
+}
+
+function resumeAudio() {
+    if (cardOpen && !isMuted && spookyAudio) {
+        spookyAudio.play().catch(e => console.log('Music resume blocked:', e));
     }
 }
 
-document.addEventListener("visibilitychange", handleVisibility);
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden || document.visibilityState === 'hidden') {
+        pauseAllAudio();
+    } else {
+        resumeAudio();
+    }
+});
 
-// Catch mobile app switcher and tab changes faster
-window.addEventListener("blur", handleVisibility);
-window.addEventListener("pagehide", handleVisibility);
+// Catch mobile app switcher, tab changes, and desktop window focus loss
+window.addEventListener("blur", pauseAllAudio);
+window.addEventListener("pagehide", pauseAllAudio);
 
 window.addEventListener("focus", () => {
     // Only resume if we are actually visible
     if (document.visibilityState !== 'hidden' && !document.hidden) {
-        if (cardOpen && !isMuted && spookyAudio) {
-            spookyAudio.play().catch(e => console.log('Music resume blocked:', e));
-        }
+        resumeAudio();
     }
 });
 
-// Watchdog: Some browsers (like Firefox on Android) occasionally fail to fire visibility events reliably 
-// or delay them. This active loop ensures the audio is killed if the document becomes hidden.
+// Watchdog: Some browsers occasionally fail to fire visibility events reliably.
 setInterval(() => {
     if (document.hidden || document.visibilityState === 'hidden') {
-        if (spookyAudio && !spookyAudio.paused) {
-            spookyAudio.pause();
-        }
-        if (typeof currentLaughAudio !== 'undefined' && currentLaughAudio && !currentLaughAudio.paused) {
-            currentLaughAudio.pause();
-        }
+        pauseAllAudio();
     }
 }, 500);
 
