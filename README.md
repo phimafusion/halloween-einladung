@@ -20,7 +20,7 @@ Eine animierte, digitale Einladungskarte für Carmens 70. Geburtstag im schaurig
 
 ## 🏗️ Architektur & Code-Struktur
 
-Die Codebase wurde kürzlich einem vollständigen Refactoring unterzogen, um maximale Wartbarkeit und Stabilität zu gewährleisten:
+Die Codebase wurde einem vollständigen Refactoring unterzogen, um maximale Wartbarkeit und Stabilität zu gewährleisten:
 
 - **Core**: Semantisches HTML5 & Vanilla CSS3 (ohne externe Frameworks).
 - **Objektorientiertes JavaScript (ES6)**: Die gesamte Logik ist sauber in spezialisierte Klassen aufgeteilt:
