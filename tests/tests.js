@@ -104,7 +104,7 @@ QUnit.module('Halloween Invitation Card Tests', function(hooks) {
         assert.strictEqual(laughPaused, true, 'currentLaughAudio.pause() should be called');
     });
 
-    QUnit.test('SVG Injection', function(assert) {
+    QUnit.test('SVG Injection and Deco Content', function(assert) {
         // Run inject method
         window.cardApp.injectSVGs();
         
@@ -115,6 +115,10 @@ QUnit.module('Halloween Invitation Card Tests', function(hooks) {
             assert.ok(leftContainer.innerHTML.includes('<svg'), 'Left container should contain injected SVG markup');
         } else {
             assert.ok(true, 'Test environment missing DOM nodes or SVG data for injection');
+        }
+
+        if (window.SvgData && window.SvgData.rightDeco) {
+            assert.notOk(window.SvgData.rightDeco.includes('animated-pumpkins-right'), 'Right deco SVG should not contain removed hover pumpkins');
         }
     });
 
