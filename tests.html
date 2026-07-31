@@ -13,7 +13,9 @@
       <div id="halloween-card" class="card-container">
         <div class="card-cover">
           <div class="face front"></div>
-          <div class="face back"></div>
+          <div class="face back">
+            <p class="spooky-joke">„Warum können Geister so schlecht lügen?<br>Weil man sie so leicht durchschauen kann.“</p>
+          </div>
         </div>
         <div class="card-back"></div>
       </div>
@@ -165,6 +167,11 @@
         // Toggle card open
         window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
         assert.true(playCalled, 'spookyAudio.play() is resumed directly instead of waiting for laugh');
+      });
+
+      QUnit.test('Spooky joke element exists with expected class', function(assert) {
+        var jokeEl = document.querySelector('.spooky-joke');
+        assert.ok(jokeEl, 'Spooky joke element is present');
       });
       
     });

@@ -738,9 +738,9 @@ body.card-is-open .subtitle {
     font-style: italic;
     color: #4a2f0f;
     line-height: 1.4;
-    padding: 6px 15px;
+    padding: 6px 4px;
     margin: 10px auto;
-    max-width: 90%;
+    width: 100%;
     opacity: 0.85;
 }
 
