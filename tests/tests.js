@@ -51,6 +51,18 @@ QUnit.module('Halloween Invitation Card Tests', function(hooks) {
         }
     });
 
+    QUnit.test('Mobile Header Collapse State', function(assert) {
+        assert.notOk(document.body.classList.contains('card-is-open'), 'Body initially does not have card-is-open class');
+        
+        // Open card
+        window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
+        assert.ok(document.body.classList.contains('card-is-open'), 'Body gains card-is-open class on open (triggering mobile header collapse CSS)');
+
+        // Close card
+        window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
+        assert.notOk(document.body.classList.contains('card-is-open'), 'Body removes card-is-open class on close (restoring main header)');
+    });
+
     QUnit.test('Spiderweb Generation', function(assert) {
         assert.strictEqual(window.cardApp.animationEngine.webStrands.length, 16, 'Should initialize exactly 16 dangling web strands (8 per side)');
         
