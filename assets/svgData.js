@@ -22,45 +22,6 @@ window.SvgData = {
                 <ellipse cx="50" cy="30" rx="18" ry="20" fill="#6a2fa0" opacity="0.15" filter="url(#blur1)" />
             </g>
         </g>
-        <!-- Mid-right margin: Friendly glowing pumpkin -->
-        <g transform="translate(290, 180) scale(0.48)" opacity="0.75">
-            <g>
-                <animateTransform attributeName="transform" type="rotate" values="-6 55 85; 6 55 85; -6 55 85" dur="4s" repeatCount="indefinite" />
-                <ellipse cx="55" cy="55" rx="28" ry="30" fill="#e8821a" opacity="0.45" filter="url(#blur1)" />
-                <path d="M53 28 Q48 12 56 8 Q60 16 57 28" fill="#4a5d23" />
-                <ellipse cx="36" cy="55" rx="16" ry="26" fill="#cc5200" />
-                <ellipse cx="74" cy="55" rx="16" ry="26" fill="#cc5200" />
-                <ellipse cx="45" cy="55" rx="20" ry="28" fill="#e65c00" />
-                <ellipse cx="65" cy="55" rx="20" ry="28" fill="#e65c00" />
-                <ellipse cx="55" cy="55" rx="22" ry="30" fill="#ff7518" />
-                <!-- Glowing Eyes -->
-                <ellipse cx="43" cy="45" rx="6" ry="7" filter="url(#blur1)">
-                    <animate attributeName="fill" values="#ffaa00; #fff066; #ffaa00" dur="2.5s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="0.55; 0.95; 0.55" dur="2.5s" repeatCount="indefinite" />
-                </ellipse>
-                <ellipse cx="43" cy="45" rx="4" ry="5">
-                    <animate attributeName="fill" values="#e68a00; #ffcc00; #e68a00" dur="2.5s" repeatCount="indefinite" />
-                </ellipse>
-                <ellipse cx="67" cy="45" rx="6" ry="7" filter="url(#blur1)">
-                    <animate attributeName="fill" values="#ffaa00; #fff066; #ffaa00" dur="2.5s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="0.55; 0.95; 0.55" dur="2.5s" repeatCount="indefinite" />
-                </ellipse>
-                <ellipse cx="67" cy="45" rx="4" ry="5">
-                    <animate attributeName="fill" values="#e68a00; #ffcc00; #e68a00" dur="2.5s" repeatCount="indefinite" />
-                </ellipse>
-                <!-- Nose & Smile -->
-                <polygon points="55,50 51,55 59,55" fill="#ffcc00" />
-                <path d="M38 58 Q55 75 72 58 Q55 65 38 58" filter="url(#blur1)">
-                    <animate attributeName="fill" values="#ffaa00; #fff066; #ffaa00" dur="2.5s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="0.55; 0.95; 0.55" dur="2.5s" repeatCount="indefinite" />
-                </path>
-                <path d="M38 58 Q55 75 72 58 Q55 65 38 58">
-                    <animate attributeName="fill" values="#e68a00; #ffcc00; #e68a00" dur="2.5s" repeatCount="indefinite" />
-                </path>
-                <polygon points="44,59 47,63 49,60" fill="#ffffff" />
-                <polygon points="66,59 63,63 61,60" fill="#ffffff" />
-            </g>
-        </g>
         <!-- Autumn leaves -->
         <g transform="translate(305, 40) rotate(30) scale(0.45)" opacity="0.50">
             <path d="M20 0 Q35 8 30 25 Q20 32 10 25 Q5 8 20 0 Z" fill="#e05c10" />

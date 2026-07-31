@@ -483,11 +483,11 @@ body.card-is-open .subtitle {
     z-index: 10;
     width: 100%;
     height: 100%;
-    padding: 16px 14px;
+    padding: 20px 18px;
     color: var(--text-dark);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     overflow-y: hidden;
 }
 
@@ -512,86 +512,86 @@ body.card-is-open .subtitle {
 
 .section-title.gothic {
     font-family: var(--font-spooky);
-    font-size: 1.6rem;
-    letter-spacing: 1.2px;
+    font-size: 1.75rem;
+    letter-spacing: 1.3px;
     color: #1c0e29;
     text-shadow: 0 0 10px rgba(255, 122, 0, 0.65), 0 0 3px rgba(255, 122, 0, 0.9);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     padding-bottom: 4px;
 }
 
 .spooky-lead {
     text-align: center;
-    font-size: 0.88rem;
-    line-height: 1.3;
-    margin-bottom: 5px;
+    font-size: 0.92rem;
+    line-height: 1.35;
+    margin-bottom: 8px;
 }
 
 .spooky-lead .highlight {
     font-family: var(--font-spooky);
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     color: var(--h-orange);
     text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
 }
 
 .invitation-text {
     text-align: center;
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-style: italic;
     line-height: 1.35;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .spooky-joke {
     text-align: center;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-style: italic;
     opacity: 0.85;
-    margin-bottom: 4px;
+    margin-bottom: 12px;
 }
 
 .menu-box {
-    background: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 255, 255, 0.7);
     border: 1px dashed var(--wc-border);
     border-radius: 8px;
-    padding: 6px 8px;
-    margin-top: auto;
+    padding: 8px 10px;
+    margin-top: 4px;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.03);
 }
 
 .box-title {
     font-family: var(--font-spooky);
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     text-align: center;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     color: #3b1d5c;
     letter-spacing: 0.8px;
 }
 
 .menu-list {
     list-style: none;
-    font-size: 0.72rem;
-    line-height: 1.3;
+    font-size: 0.74rem;
+    line-height: 1.38;
     color: #2b1442;
     font-weight: 500;
 }
 
 .menu-list li {
-    margin-bottom: 2.5px;
+    margin-bottom: 3.5px;
     padding-left: 2px;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     white-space: nowrap;
 }
 
 .menu-list .menu-icon {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     flex-shrink: 0;
 }
 
 .veggie-tag {
-    font-size: 0.65rem;
+    font-size: 0.67rem;
     color: #3d6a20;
     font-weight: 600;
     font-style: italic;
