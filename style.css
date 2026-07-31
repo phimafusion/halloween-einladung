@@ -568,12 +568,14 @@ body.card-is-open .subtitle {
 
 .menu-list {
     list-style: none;
-    font-size: 0.73rem;
-    line-height: 1.35;
+    font-size: 0.74rem;
+    line-height: 1.38;
+    color: #2b1442;
+    font-weight: 500;
 }
 
 .menu-list li {
-    margin-bottom: 3.5px;
+    margin-bottom: 4px;
     padding-left: 2px;
     display: flex;
     align-items: baseline;
@@ -585,11 +587,11 @@ body.card-is-open .subtitle {
     flex-shrink: 0;
 }
 
-.menu-list .dish-orig {
-    font-size: 0.67rem;
-    color: #555;
+.veggie-tag {
+    font-size: 0.68rem;
+    color: #3d6a20;
+    font-weight: 600;
     font-style: italic;
-    font-weight: normal;
 }
 
 /* Timeline on Right Page */
