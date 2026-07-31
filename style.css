@@ -688,11 +688,11 @@ body.card-is-open .subtitle {
 }
 
 .gift-note .highlight-gift {
-    font-family: var(--font-spooky);
-    font-size: 0.95rem;
+    font-family: inherit;
+    font-size: 0.84rem;
     color: var(--h-orange);
     font-style: normal;
-    letter-spacing: 0.5px;
+    font-weight: 700;
 }
 
 .footer-note {
