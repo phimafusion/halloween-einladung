@@ -22,8 +22,8 @@ window.SvgData = {
                 <ellipse cx="50" cy="30" rx="18" ry="20" fill="#6a2fa0" opacity="0.15" filter="url(#blur1)" />
             </g>
         </g>
-        <!-- Center-mid: Friendly glowing pumpkin -->
-        <g transform="translate(135, 295) scale(0.70)" opacity="0.75">
+        <!-- Center-top: Friendly glowing pumpkin -->
+        <g transform="translate(135, 20) scale(0.60)" opacity="0.75">
             <g>
                 <animateTransform attributeName="transform" type="rotate" values="-6 55 85; 6 55 85; -6 55 85" dur="4s" repeatCount="indefinite" />
                 <ellipse cx="55" cy="55" rx="28" ry="30" fill="#e8821a" opacity="0.45" filter="url(#blur1)" />
