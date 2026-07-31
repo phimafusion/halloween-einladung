@@ -142,6 +142,7 @@ body {
     margin: 0;
     z-index: 5;
     pointer-events: none;
+    transition: opacity 0.5s ease, max-height 0.5s ease, margin 0.5s ease, transform 0.5s ease;
 }
 
 .spooky-title {
@@ -185,6 +186,7 @@ body.card-is-open .subtitle {
     max-height: var(--card-max-h);
     margin: 0;
     z-index: 10;
+    transition: margin 0.5s ease;
 }
 
 .card-container {
@@ -221,6 +223,21 @@ body.card-is-open .subtitle {
 }
 
 @media (max-width: 600px) {
+    /* Hide header when card is open on mobile so card moves to top position */
+    body.card-is-open .main-header {
+        opacity: 0;
+        max-height: 0;
+        margin: 0;
+        overflow: hidden;
+        pointer-events: none;
+        transform: translateY(-15px);
+    }
+
+    body.card-is-open .app-container {
+        padding-top: 15px;
+        justify-content: flex-start;
+    }
+
     /* ── PHASE 1: Deckblatt flies off & Page 1 is immediately shown flat ── */
     .card-perspective {
         width: 88vw;

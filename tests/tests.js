@@ -31,6 +31,7 @@ QUnit.module('Halloween Invitation Card Tests', function(hooks) {
         window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
         
         assert.strictEqual(window.cardApp.cardController.cardOpen, true, 'Card should transition to open');
+        assert.ok(document.body.classList.contains('card-is-open'), 'Body should have "card-is-open" class when card is open');
         assert.strictEqual(window.cardApp.animationEngine.targetAngle, Math.PI, 'Target angle should be Math.PI (180 degrees) when open');
         
         const card = window.cardApp.getCardElement();
@@ -43,6 +44,7 @@ QUnit.module('Halloween Invitation Card Tests', function(hooks) {
         // Toggle again to close
         window.cardApp.cardController.toggleCard({ target: window.cardApp.getCardElement() });
         assert.strictEqual(window.cardApp.cardController.cardOpen, false, 'Card should transition to closed');
+        assert.notOk(document.body.classList.contains('card-is-open'), 'Body should not have "card-is-open" class when card is closed');
         assert.strictEqual(window.cardApp.animationEngine.targetAngle, 0, 'Target angle should return to 0');
         if (card) {
             assert.notOk(card.classList.contains('open'), 'Card element should not have "open" class');
