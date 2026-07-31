@@ -814,17 +814,6 @@ body.card-is-open .subtitle {
     opacity: 0.85;
 }
 
-/* The pumpkin animation has been migrated to native SVG <animate> tags for cross-browser compatibility */
-
-.card-back:hover .animated-pumpkins-right {
-    transform: rotate(5deg);
-}
-
-.animated-pumpkins-right {
-    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-    transform-origin: center bottom;
-}
-
 /* 5. Menu Icons Continuous Wiggle */
 @keyframes wiggleIcon {
     0%, 100% { transform: rotate(0deg); }

@@ -82,25 +82,6 @@ window.SvgData = {
         <g transform="translate(300, 80) scale(0.38)" opacity="0.38">
             <path d="M50 20 Q35 5 15 15 Q28 22 32 30 Q40 38 50 35 Q60 38 68 30 Q72 22 85 15 Q65 5 50 20 Z" fill="#2a1040" />
             <ellipse cx="50" cy="30" rx="8" ry="10" fill="#2a1040" />
-        </g>
-        <!-- Bottom-left: Two small pumpkins -->
-        <g transform="translate(-5, 460) scale(0.50)" class="animated-pumpkins-right" opacity="0.55">
-            <!-- Pumpkin A -->
-            <path d="M22 45 Q26 22 44 20 Q62 22 66 45 Q62 68 44 70 Q26 68 22 45 Z" fill="#d97010" opacity="0.85" />
-            <path d="M32 45 Q35 24 44 22 Q53 24 56 45 Q53 66 44 68 Q35 66 32 45 Z" fill="#f08820" opacity="0.6" />
-            <path d="M38 42 L43 36 L48 42 Z" fill="#1c0a04" opacity="0.9" />
-            <path d="M50 42 L55 36 L60 42 Z" fill="#1c0a04" opacity="0.9" />
-            <path d="M37 52 Q44 59 58 52" stroke="#1c0a04" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.85" />
-            <path d="M42 20 Q40 10 45 6 Q48 14 46 20" fill="#5a3010" opacity="0.7" />
-            <!-- Pumpkin B -->
-            <g transform="translate(55, 15) scale(0.65)">
-                <path d="M22 45 Q26 22 44 20 Q62 22 66 45 Q62 68 44 70 Q26 68 22 45 Z" fill="#c86010" opacity="0.75" />
-                <path d="M38 42 L42 37 L46 42 Z" fill="#1c0a04" opacity="0.85" />
-                <path d="M48 42 L52 37 L56 42 Z" fill="#1c0a04" opacity="0.85" />
-                <path d="M40 52 Q44 58 56 52" stroke="#1c0a04" stroke-width="2" fill="none" opacity="0.75" />
-                <path d="M42 20 Q40 10 45 6 Q48 14 46 20" fill="#5a3010" opacity="0.65" />
-            </g>
-        </g>
         <!-- Autumn leaves -->
         <g transform="translate(340, 200) rotate(-35) scale(0.44)" opacity="0.48">
             <path d="M20 0 Q38 10 32 28 Q20 35 8 28 Q2 10 20 0 Z" fill="#d06010" />
