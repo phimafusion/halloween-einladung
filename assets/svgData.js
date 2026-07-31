@@ -40,7 +40,7 @@ window.SvgData = {
             <path d="M20 0 L20 30" stroke="#b85510" stroke-width="1.5" fill="none" opacity="0.55" />
         </g>
         <!-- Branch -->
-        <g opacity="0.35">
+        <g opacity="0.10">
             <path d="M340 560 Q320 490 310 440 Q300 400 330 370" stroke="#5a3010" stroke-width="4" fill="none" stroke-linecap="round" />
             <path d="M310 440 Q280 420 265 400" stroke="#5a3010" stroke-width="2.5" fill="none" stroke-linecap="round" />
             <path d="M320 480 Q290 470 278 455" stroke="#5a3010" stroke-width="2" fill="none" stroke-linecap="round" />
