@@ -557,15 +557,19 @@ body.card-is-open .subtitle {
 .spooky-lead {
     text-align: center;
     font-size: 0.92rem;
-    line-height: 1.35;
-    margin-bottom: 8px;
+    line-height: 1.3;
+    margin-bottom: 6px;
 }
 
 .spooky-lead .highlight {
     font-family: var(--font-spooky);
-    font-size: 1.35rem;
+    font-size: 1.65rem;
+    line-height: 1.1;
+    display: inline-block;
     color: var(--h-orange);
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+    letter-spacing: 0.5px;
+    margin: 2px 0;
 }
 
 .invitation-text {
