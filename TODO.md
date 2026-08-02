@@ -3,7 +3,7 @@
 ## Erledigte Aufgaben
 - [x] **Deckblatt-Text erweitert & zweizeilig formatiert**: "Für den 30. Oktober" nach oben verschoben und darunter "Ins Casino" (Zeile 3) sowie "Rammelsberg" (Zeile 4) im schaurigen Titel-Font (`Creepster`) platziert.
 - [x] **Ablauf-Eintrag angepasst**: Erster Eintrag in der Timeline (16:30 Uhr) auf „Pforten der Finsternis öffnen sich<br>(Bergtal 19, 38640 Goslar)“ angepasst.
-- [x] **Timeline-Emojis vergrößert, zentriert & animiert**: Emojis in der Timeline auf `1.4rem` vergrößert, vertikal mittig ausgerichtet, Hexenbuffet-Emoji auf 🥘 (Schmoren-Pfanne) angepasst und mit versetzter Wackel-Animation versehen.
+- [x] **Emojis in Menü & Ablauf optimiert**: Timeline-Emojis auf `1.4rem` vergrößert, vertikal zentriert und mit Wackel-Animation versehen; Hexenbuffet-Emoji auf 🥘 und Flammkuchen-Emoji auf 🔥 (Flamme) geändert.
 
 ## Spätere Ideen (Features)
 - [ ] **RSVP-Button (Zusagen / Absagen)**: Button auf der rechten Innenseite der Karte, der eine vorausgefüllte WhatsApp oder E-Mail öffnet.
