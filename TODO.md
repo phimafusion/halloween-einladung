@@ -2,7 +2,7 @@
 
 ## Erledigte Aufgaben
 - [x] **Deckblatt-Text erweitert & zweizeilig formatiert**: "Für den 30. Oktober" nach oben verschoben und darunter "Ins Casino" (Zeile 3) sowie "Rammelsberg" (Zeile 4) im schaurigen Titel-Font (`Creepster`) platziert.
-- [x] **Ablauf-Eintrag angepasst**: Erster Eintrag in der Timeline (16:30 Uhr) auf „Pforten der Finsternis öffnen sich am Bergtal 19, Goslar“ angepasst und „Einlass“ entfernt.
+- [x] **Ablauf-Eintrag angepasst**: Erster Eintrag in der Timeline (16:30 Uhr) auf „Pforten der Finsternis öffnen sich<br>am Bergtal 19, Goslar“ zweizeilig formatiert und „Einlass“ entfernt.
 
 ## Spätere Ideen (Features)
 - [ ] **RSVP-Button (Zusagen / Absagen)**: Button auf der rechten Innenseite der Karte, der eine vorausgefüllte WhatsApp oder E-Mail öffnet.
