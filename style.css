@@ -386,7 +386,7 @@ body.card-is-open .subtitle {
 
 .cover-title-container {
     position: absolute;
-    top: 40%;
+    top: 48%;
     left: 0;
     right: 0;
     transform: translateY(-50%) rotate(-4deg);
