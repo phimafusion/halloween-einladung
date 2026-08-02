@@ -681,6 +681,29 @@ body.card-is-open .subtitle {
     border-radius: 50%;
     line-height: 1;
     z-index: 2;
+    animation: wiggleEmoji 3s infinite ease-in-out;
+}
+
+.timeline-item:nth-child(2) .timeline-icon {
+    animation-delay: 0.5s;
+}
+.timeline-item:nth-child(3) .timeline-icon {
+    animation-delay: 1.0s;
+}
+.timeline-item:nth-child(4) .timeline-icon {
+    animation-delay: 1.5s;
+}
+
+@keyframes wiggleEmoji {
+    0%, 100% {
+        transform: translateY(-50%) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-50%) rotate(-12deg) scale(1.08);
+    }
+    75% {
+        transform: translateY(-50%) rotate(12deg) scale(1.08);
+    }
 }
 
 .time {
