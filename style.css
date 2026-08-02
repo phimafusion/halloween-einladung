@@ -386,18 +386,22 @@ body.card-is-open .subtitle {
 
 .cover-title-container {
     position: absolute;
-    top: 50%;
+    top: 42%;
     left: 0;
     right: 0;
     transform: translateY(-50%) rotate(-4deg);
     text-align: center;
     pointer-events: none;
     padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
 }
 
 .cover-title {
     font-family: var(--font-spooky);
-    font-size: 2.4rem;
+    font-size: 2.3rem;
     color: #1c0e29;
     letter-spacing: 1.5px;
     text-shadow: 0 0 12px rgba(255, 122, 0, 0.8), 0 0 4px rgba(255, 122, 0, 0.95);
@@ -405,6 +409,19 @@ body.card-is-open .subtitle {
     text-align: center;
     line-height: 1.15;
     animation: pulseTitle 3s infinite ease-in-out;
+}
+
+.cover-location {
+    font-family: var(--font-spooky);
+    font-size: 1.65rem;
+    color: #1c0e29;
+    letter-spacing: 1.2px;
+    text-shadow: 0 0 12px rgba(255, 122, 0, 0.8), 0 0 4px rgba(255, 122, 0, 0.95);
+    display: inline-block;
+    text-align: center;
+    line-height: 1.15;
+    animation: pulseTitle 3s infinite ease-in-out;
+    animation-delay: 0.5s;
 }
 
 @keyframes pulseTitle {
