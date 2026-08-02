@@ -665,17 +665,22 @@ body.card-is-open .subtitle {
     padding-left: 12px;
 }
 
-/* Die Emojis sitzen genau zentriert auf der Linie */
+/* Die Emojis sitzen genau zentriert auf der Linie und vertikal mittig zum zugehörigen Text */
 .timeline-icon {
     position: absolute;
-    left: -26px; /* Zentriert auf die 8px Position der Linie (16px breit / 2) */
-    top: 2px;
-    font-size: 1.1rem;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.4rem;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--wc-beige); /* Maskiert die Linie dahinter */
-    padding: 1px 3px;
     border-radius: 50%;
     line-height: 1;
-    display: inline-block;
+    z-index: 2;
 }
 
 .time {
