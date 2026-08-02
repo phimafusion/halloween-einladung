@@ -386,7 +386,7 @@ body.card-is-open .subtitle {
 
 .cover-title-container {
     position: absolute;
-    top: 42%;
+    top: 40%;
     left: 0;
     right: 0;
     transform: translateY(-50%) rotate(-4deg);
@@ -396,12 +396,12 @@ body.card-is-open .subtitle {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .cover-title {
     font-family: var(--font-spooky);
-    font-size: 2.3rem;
+    font-size: 2.2rem;
     color: #1c0e29;
     letter-spacing: 1.5px;
     text-shadow: 0 0 12px rgba(255, 122, 0, 0.8), 0 0 4px rgba(255, 122, 0, 0.95);
@@ -413,9 +413,9 @@ body.card-is-open .subtitle {
 
 .cover-location {
     font-family: var(--font-spooky);
-    font-size: 1.65rem;
+    font-size: 1.75rem;
     color: #1c0e29;
-    letter-spacing: 1.2px;
+    letter-spacing: 1.3px;
     text-shadow: 0 0 12px rgba(255, 122, 0, 0.8), 0 0 4px rgba(255, 122, 0, 0.95);
     display: inline-block;
     text-align: center;

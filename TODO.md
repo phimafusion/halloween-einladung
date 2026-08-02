@@ -1,7 +1,7 @@
 # 🎃 TODOs & Entwicklungs-Roadmap
 
 ## Erledigte Aufgaben
-- [x] **Deckblatt-Text erweitert**: "Für den 30. Oktober" leicht nach oben verschoben und darunter "ins Casino Rammelsberg" im schaurigen Titel-Font (`Creepster`) ergänzt.
+- [x] **Deckblatt-Text erweitert & zweizeilig formatiert**: "Für den 30. Oktober" nach oben verschoben und darunter "Ins Casino" (Zeile 3) sowie "Rammelsberg" (Zeile 4) im schaurigen Titel-Font (`Creepster`) platziert.
 
 ## Spätere Ideen (Features)
 - [ ] **RSVP-Button (Zusagen / Absagen)**: Button auf der rechten Innenseite der Karte, der eine vorausgefüllte WhatsApp oder E-Mail öffnet.
