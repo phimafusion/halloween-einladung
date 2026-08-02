@@ -5,7 +5,7 @@
 - [x] **Ablauf-Eintrag angepasst**: Erster Eintrag in der Timeline (16:30 Uhr) auf „Pforten der Finsternis öffnen sich<br>(Bergtal 19, 38640 Goslar)“ angepasst.
 - [x] **Emojis in Menü & Ablauf optimiert**: Timeline-Emojis auf `1.4rem` vergrößert, vertikal zentriert und mit Wackel-Animation versehen; Hexenbuffet-Emoji auf 🥘 und Flammkuchen-Emoji auf 🔥 (Flamme) geändert.
 - [x] **Schriftzug 'Carmen wird 70 Jahr!' hervorgehoben**: Schriftgröße auf `1.65rem` vergrößert und durch angepasste Zeilenhöhe ins Layout eingepasst, ohne den restlichen Inhalt zu verschieben.
-- [x] **Dokumentation & README überarbeitet**: Vollständige Überarbeitung von [README.md](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/README.md) und [TODO.md](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/TODO.md) mit detaillierten Abschnitten zu Features, Architektur, Tests (~87,5 % Abdeckung) und lokaler Entwicklung.
+- [x] **Dokumentation & README überarbeitet**: Vollständige Überarbeitung von [README.md](README.md) und [TODO.md](TODO.md) mit detaillierten Abschnitten zu Features, Architektur, Tests (~87,5 % Abdeckung) und lokaler Entwicklung (ohne externe absolute Systempfade).
 
 ## Spätere Ideen (Features)
 - [ ] **RSVP-Button (Zusagen / Absagen)**: Button auf der rechten Innenseite der Karte, der eine vorausgefüllte WhatsApp oder E-Mail öffnet.

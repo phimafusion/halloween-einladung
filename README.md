@@ -25,11 +25,11 @@ Eine hochmoderne, animierte digitale Einladungskarte für Carmens 70. Geburtstag
 Das Projekt basiert auf reinem **HTML5, Vanilla CSS3 und ES6 JavaScript** (ohne externe Frameworks oder schwere Build-Tools):
 
 - **Core-Architektur (Object-Oriented ES6)**:
-  - `CardController` ([app.js](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/app.js#L254)): Steuert das Öffnen/Schließen der Karte, DOM-Klassen und Tab-Sichtbarkeits-Events.
-  - `AnimationEngine` ([app.js](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/app.js#L187)): Verwaltet das HTML5 Canvas, den Render-Loop sowie Partikel-Klassen (`Bat`, `WebStrand`).
-  - `AudioManager` ([app.js](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/app.js#L7)): Kapselt HTML5 Audio-Objekte, Lautstärkeregelung und Autoplay-Fallback.
-- **SVG-Kapselung**: Komplette Entkopplung großer Vektorgrafiken in [assets/svgData.js](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/assets/svgData.js). Dadurch bleibt die [index.html](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/index.html) extrem schlank und lesbar (ohne CORS-Restriktionen).
-- **Design-System**: Umfassendes CSS-Token-System in [style.css](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/style.css) mit benutzerdefinierten Eigenschaften (`:root`), Typography (`Creepster`, `Fredericka the Great`, `Montserrat`) und 3D-Transforms.
+  - `CardController` ([app.js](app.js)): Steuert das Öffnen/Schließen der Karte, DOM-Klassen und Tab-Sichtbarkeits-Events.
+  - `AnimationEngine` ([app.js](app.js)): Verwaltet das HTML5 Canvas, den Render-Loop sowie Partikel-Klassen (`Bat`, `WebStrand`).
+  - `AudioManager` ([app.js](app.js)): Kapselt HTML5 Audio-Objekte, Lautstärkeregelung und Autoplay-Fallback.
+- **SVG-Kapselung**: Komplette Entkopplung großer Vektorgrafiken in [assets/svgData.js](assets/svgData.js). Dadurch bleibt die [index.html](index.html) extrem schlank und lesbar (ohne CORS-Restriktionen).
+- **Design-System**: Umfassendes CSS-Token-System in [style.css](style.css) mit benutzerdefinierten Eigenschaften (`:root`), Typography (`Creepster`, `Fredericka the Great`, `Montserrat`) und 3D-Transforms.
 
 ---
 
@@ -53,5 +53,5 @@ py -m http.server 8080
 
 Das Projekt ist mit automatisierten Unit-Tests auf Basis von **QUnit** abgesichert.
 
-- **Tests ausführen:** Öffne die Datei [tests.html](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/tests.html) oder navigiere im lokalen Server zu `http://localhost:8080/tests.html`.
+- **Tests ausführen:** Öffne die Datei [tests.html](tests.html) oder navigiere im lokalen Server zu `http://localhost:8080/tests.html`.
 - **Testabdeckung (~87,5 %):** Überprüft werden u. a. die Initialisierung aller Manager, das Togglen von 3D-DOM-Zuständen, die Partikel-Physik, das Auslösen der SVG-Injection sowie die automatische Audio-Stummschaltung beim Schließen der Karte.
