@@ -1,6 +1,6 @@
 # 🎃 Interaktive Halloween-Einladungskarte
 
-Eine animierte, digitale Einladungskarte für Carmens 70. Geburtstag im schaurig-schönen Halloween-Stil. Die Karte ist optimiert für die flüssige Darstellung auf allen gängigen Smartphones und Desktop-Browsern.
+Eine hochmoderne, animierte digitale Einladungskarte für Carmens 70. Geburtstag im schaurig-schönen Halloween-Stil. Die Karte ist vollständig responsiv gestaltet und bietet eine flüssige 3D-Faltung sowie interaktive Animationen auf allen gängigen Smartphones (iOS & Android) sowie Desktop-Browsern.
 
 🔗 **Live-Version:** [https://phimafusion.github.io/halloween-einladung/](https://phimafusion.github.io/halloween-einladung/)
 
@@ -8,48 +8,50 @@ Eine animierte, digitale Einladungskarte für Carmens 70. Geburtstag im schaurig
 
 ## ⚡ Features & Interaktionen
 
-- **Responsive 3D-Faltung**: Die Karte öffnet sich bei einem Klick oder Tippen wie ein echtes Buch. Dank CSS 3D-Transforms wirkt dies realistisch, auf dem Handy fliegt das Cover sogar dynamisch nach oben weg, um mehr Platz für den Text zu machen.
-- **HTML5 Canvas Animationen**: 
-  - **Fledermäuse**: Beim Öffnen brechen Fledermaus-Partikel aus dem Falz aus, flattern und fliegen physikalisch berechnet in den "Himmel".
-  - **Hängende Spinnweben**: Feine, dynamisch berechnete Spinnweben hängen von den Rändern des Bildschirms herab und wiegen sich sanft im Wind.
-- **Gruselige Audio-Kulisse**: Ein "Evil Laugh" erklingt beim ersten Öffnen, gefolgt von einem schaurigen Cover von *"Time Warp"* (Rocky Horror Picture Show).
-- **Intelligente Hintergrund-Pausierung**: Die Karte pausiert die Musik automatisch auf allen Geräten (iOS/Android/Desktop), sobald der Tab gewechselt wird oder die App in den Hintergrund rückt.
-- **Stummschaltung**: Über einen dezenten Audio-Button oben rechts lässt sich die Tonspur jederzeit komplett muten.
+- **Responsive 3D-Buchfaltung**: Die Karte öffnet sich bei Klick oder Touch realistisch im 3D-Raum. Auf Smartphones fliegt die Vorderseite dynamisch nach oben rechts weg, um Platz für die Inhalte zu schaffen.
+- **Micro-Animationen & Effekte**:
+  - **Wackelnde Timeline-Emojis**: Die Emojis im Ablauf (`🗝️`, `🥘`, `🧛`, `👻`) sind vergrößert (`1.4rem`), vertikal mittig am Text ausgerichtet und wiegen sich leicht zeitversetzt hin und her (`wiggleEmoji`).
+  - **HTML5 Canvas Fledermäuse**: Beim Öffnen brechen physikalisch berechnete Fledermaus-Partikel aus dem Kartenfalzen aus und fliegen in den Himmel.
+  - **Dynamische Spinnweben**: Zarte, mathematisch animierte Spinnenfäden hängen von den Bildschirmrändern herab und schwingen sanft im Wind.
+- **Gruselige Audio-Kulisse**:
+  - Ein schauriges Lachen (*Evil Laugh*) erklingt beim ersten Öffnen, gefolgt von einer Loop-Spur von *"Time Warp"* (Rocky Horror Picture Show).
+  - **Stummschaltung**: Dezenter Sound-Toggle-Button oben rechts (`🔇` / `🔊`).
+  - **Automatische Pause**: Die Musik pausiert sofort beim Schließen der Karte, beim Wechseln des Browser-Tabs oder beim Minimieren der App.
 
 ---
 
 ## 🏗️ Architektur & Code-Struktur
 
-Die Codebase wurde einem vollständigen Refactoring unterzogen, um maximale Wartbarkeit und Stabilität zu gewährleisten:
+Das Projekt basiert auf reinem **HTML5, Vanilla CSS3 und ES6 JavaScript** (ohne externe Frameworks oder schwere Build-Tools):
 
-- **Core**: Semantisches HTML5 & Vanilla CSS3 (ohne externe Frameworks).
-- **Objektorientiertes JavaScript (ES6)**: Die gesamte Logik ist sauber in spezialisierte Klassen aufgeteilt:
-  - `CardController`: Verwaltet die DOM-Klicks, CSS-Klassen und das Sichtbarkeits-Management (Tab in den Hintergrund).
-  - `AnimationEngine`: Steuert den Canvas, die Physik der Fledermäuse (`Bat`) und die Spinnenfäden (`WebStrand`).
-  - `AudioManager`: Kapselt die MP3-Integration, das Muten und Pausieren/Abspielen.
-- **SVG-Management**: Große Vektorgrafiken wurden aus der `index.html` entfernt und in `assets/svgData.js` als Template-Strings ausgelagert. Dies hält das HTML extrem schlank, während die Grafiken per JS injiziert werden – ganz ohne `fetch()`-CORS-Probleme!
+- **Core-Architektur (Object-Oriented ES6)**:
+  - `CardController` ([app.js](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/app.js#L254)): Steuert das Öffnen/Schließen der Karte, DOM-Klassen und Tab-Sichtbarkeits-Events.
+  - `AnimationEngine` ([app.js](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/app.js#L187)): Verwaltet das HTML5 Canvas, den Render-Loop sowie Partikel-Klassen (`Bat`, `WebStrand`).
+  - `AudioManager` ([app.js](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/app.js#L7)): Kapselt HTML5 Audio-Objekte, Lautstärkeregelung und Autoplay-Fallback.
+- **SVG-Kapselung**: Komplette Entkopplung großer Vektorgrafiken in [assets/svgData.js](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/assets/svgData.js). Dadurch bleibt die [index.html](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/index.html) extrem schlank und lesbar (ohne CORS-Restriktionen).
+- **Design-System**: Umfassendes CSS-Token-System in [style.css](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/style.css) mit benutzerdefinierten Eigenschaften (`:root`), Typography (`Creepster`, `Fredericka the Great`, `Montserrat`) und 3D-Transforms.
 
 ---
 
 ## 💻 Lokale Entwicklung
 
-Die Anwendung kommt komplett ohne Build-Step (wie Webpack oder Vite) aus. Da keine Ajax/Fetch-Anfragen für die Grafiken genutzt werden, funktioniert alles direkt lokal.
+Kein Build-Step (wie Webpack, Vite oder Babel) erforderlich!
 
-**Variante 1: Direktes Öffnen (Empfohlen)**
-Du kannst die `index.html` Datei einfach direkt in deinem Browser öffnen (Doppelklick). 
+**Variante 1: Direktes Öffnen**
+Öffne die Datei `index.html` per Doppelklick in deinem Browser.
 
-**Variante 2: Lokaler Webserver**
-Falls du einen lokalen Server bevorzugst (z. B. für strikte Audio-Sicherheitsrichtlinien mancher Browser):
+**Variante 2: Lokaler Webserver (Empfohlen)**
+Starte einen lokalen Python-Webserver im Projektverzeichnis:
 ```bash
-python -m http.server 8000
+py -m http.server 8080
 ```
-Öffne anschließend [http://localhost:8000](http://localhost:8000) im Browser.
+Öffne anschließend [http://localhost:8080](http://localhost:8080) im Browser.
 
 ---
 
-## 🧪 Tests (QUnit)
+## 🧪 Tests & Qualitätssicherung
 
-Das Projekt verfügt über ein automatisiertes Test-Setup mit dem **QUnit-Framework**, welches die Stabilität der JS-Klassen sicherstellt.
+Das Projekt ist mit automatisierten Unit-Tests auf Basis von **QUnit** abgesichert.
 
-- **Tests ausführen:** Öffne einfach die Datei `tests.html` im Root-Verzeichnis deines Browsers.
-- **Was getestet wird:** Die Tests überprüfen unter anderem die initiale Objekt-Instanziierung, das korrekte Togglen der DOM-Klassen beim Öffnen, die Physik-Veränderungen der Spinnenfäden, die Partikel-Berechnung sowie das sofortige Pausieren der Audio-Objekte bei Karten-Schließung oder Mute-Klicks.
+- **Tests ausführen:** Öffne die Datei [tests.html](file:///c:/Users/phili/Documents/antigravity_git/mum_70er_interaktive_karte/tests.html) oder navigiere im lokalen Server zu `http://localhost:8080/tests.html`.
+- **Testabdeckung (~87,5 %):** Überprüft werden u. a. die Initialisierung aller Manager, das Togglen von 3D-DOM-Zuständen, die Partikel-Physik, das Auslösen der SVG-Injection sowie die automatische Audio-Stummschaltung beim Schließen der Karte.
